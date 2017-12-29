@@ -1,0 +1,153 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<br/><br/><br/>
+<center>
+
+    <table>
+{#      <tr>#}
+{#        <td colspan="2" align="center"><b><font color="#0000FF">用户登录</font></b></td>#}
+{#      </tr>#}
+
+{#    {% if form.errors %}#}
+{#        <tr><td><font color="#FF0000">用户名与密码不匹配</font></td></tr>#}
+{#    {% endif %}#}
+{##}
+{#    <form class="center" method="post" action="{% url 'login' %}">{% csrf_token %}#}
+{##}
+{#      <tr>#}
+{#        <td><input type="text">用户名: {{ form.username }} </td>#}
+{#      <td>用户名: {{ form.username }} </td>#}
+{#      </tr>#}
+{##}
+{#      <tr>#}
+{#        <td><input type="password">密&nbsp;&nbsp;&nbsp;码: {{ form.password }} </td>#}
+{#      <td>密&nbsp;&nbsp;&nbsp;码: {{ form.password }} </td>#}
+{#      </tr>#}
+{##}
+{#      <tr>#}
+{#          <td>{{ form.captcha }}</td>#}
+{#      </tr>#}
+{##}
+{#        <tr>#}
+{#          <td width="242" height="40" align="left">{{ form.captcha }}#}
+{#            <script type="text/javascript">#}
+{#                $('.captcha').click(function(){  //点击图片刷新#}
+{#                    var tmp = Math.random().toString();#}
+{#                    $.get("?newsn=1&tmp="+tmp, function(result){#}
+{#                        $('.captcha').attr("src", result);#}
+{#                        $('#id_captcha_0').attr("value", result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
+{#            });#}
+{#            </script>#}
+{#          </td>#}
+{#          <td width="237" height="40" class="span-not"><span id="capCode"> </span></td>#}
+{#        </tr>#}
+{##}
+{##}
+{#      <tr>#}
+{#         <td>#}
+{#            <input type="submit" name="login" value="登录">#}
+{#         </td>#}
+{#         <td>#}
+{#            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#}
+{#            <input type="reset" name="reset" value="重置">#}
+{#         </td>#}
+{#      </tr>#}
+{##}
+{#    <input type="hidden" name="next" value="{{ next }}" />#}
+{#  </form>#}
+
+
+   <form  class="mb10" action="/login/" method="post">
+        {% csrf_token %}
+    <div class="form-radius mb10">
+        <div class="form-group">
+            <div class="input-group">
+{#                <div class="input-group-addon">用户名</div>#}
+                <label>用&nbsp;户&nbsp;名</label>
+                <input type="text" class="form-control" name="username" value="{{ username }}">
+{#                <input type="text" class="form-control" name="username">#}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+{#                <div class="input-group-addon">密码</div>#}
+                <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+        </div>
+        <div class="form-group noborder">
+            <div class="input-group" style="width: 100%">
+                {{ form.captcha }}
+            </div>
+            <div style="color:#FF0000; padding-left:12px">{{ err_message }}</div>
+
+            <script type="text/javascript">
+{#                $('.captcha').click(function(){  //点击图片刷新#}
+{#                    var tmp = Math.random().toString();#}
+{#                    $.get("?newsn=1&tmp="+tmp, function(result){#}
+{#                        $('.captcha').attr("src", result);#}
+{#                        $('#id_captcha_0').attr("value", result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
+{#                });#}
+
+                $('.captcha').click(function(){  //ajax刷新
+                    console.log('click');
+                     $.getJSON("/captcha/refresh/",
+                              function(result){
+                         $('.captcha').attr('src', result['image_url']);
+                         $('#id_captcha_0').val(result['key'])
+                      });});
+
+            </script>
+
+        </div>
+
+{#        <tr>#}
+{#          <td width="242" height="40" align="left">{{ form.captcha }}#}
+{#            <script type="text/javascript">#}
+{#                $('.captcha').click(function(){  //点击图片刷新#}
+{#                    var tmp = Math.random().toString();#}
+{#                    $.get("?newsn=1&tmp="+tmp, function(result){#}
+{#                        $('.captcha').attr("src", result);#}
+{#                        $('#id_captcha_0').attr("value", result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
+{#            });#}
+{#            </script>#}
+{#          </td>#}
+{#          <td width="237" height="40" class="span-not"><span id="capCode"> </span></td>#}
+{#        </tr>#}
+
+    </div>
+{#    <div class="text-center">#}
+{#        <input class="btn btn-block btn-login sign-in" id="sign-in" type="submit" value="登录" />#}
+{#    </div>#}
+        <tr>
+             <td>
+                <input type="submit" name="login" value="登录">
+             </td>
+             <td>
+                <a href="{% url 'register_echo' %}">注册</a>
+             </td>
+{#            <button  type="button" name="register_echo" id="register" value="注册">#}
+             <td>
+{#                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#}
+                <input type="reset" name="reset" value="重置">
+             </td>
+        </tr>
+    </form>
+
+    </table>
+  </center>
+</body>
+</html>
+

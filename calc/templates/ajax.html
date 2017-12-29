@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jQuery Ajax 测试</title>
+</head>
+<body>
+<p>请输入两个数字</p>
+<form>
+{#<form action="/add/" method="get">#}
+    a: <input type="text" id="a" name="a"> <br>
+    b: <input type="text" id="b" name="b"> <br>
+    <p>result: <span id="result"></span></p>
+    <button type="button" id="sum">提交</button>
+</form>
+
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js">
+</script>
+<script>
+    $(document).ready(function(){
+{#        点击(click)提交按钮（id=sum）时触发#}
+        $("#sum").click(function(){
+            var a = $("#a").val();
+            var b = $("#b").val();
+{#            调用了jQuery.get() 方法，并用 $(selector).html() 方法将结果显示在页面上#}
+            $.get("/add1/", {'a':a, 'b':b}, function(ret){
+              $('#result').html(ret)
+            })
+        });
+    });
+</script>
+</body>
+</html>
+
+

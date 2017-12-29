@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>主页</title>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        {% for bk in book_list %}
+            {% if bk.sum_quantity == 0 %}
+                $("#choose_{{ bk.id }}").attr("disabled", true)
+            {% else %}
+                $("#choose_{{ bk.id }}").attr("disabled", false)
+                $("#choose_{{ bk.id }}").click(function(){
+                    $.get("/order",{'user_id':{{ user_id }}, 'book_id':{{ bk.id }}}, function(ret) {
+{#                        $("#order_result_{{ bk.id }}").html(ret);#}
+                        $("#order_result").html(ret);
+                    })
+
+{#                    $.get("{{ bk.sum_quantity }}")#}
+{#                    # 此处自动刷新 bk.sum_quantity 数据#}
+                });
+            {% endif %}
+        {% endfor %}
+    });
+</script>
+</head>
+<body>
+    <h4>欢迎您，{{username}} &nbsp;&nbsp;<a href="{% url 'database.customer.logout' %}">退出</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'database.book.shopcart' %}">进入购物车</a></h4>
+
+<center>
+    <p>书籍列表</p>
+    <table border="1" align="center" width="700px" cellspacing=0 cellpadding=0>
+
+    <tr>
+        <th>编号</th>
+        <th>书名</th>
+        <th>作者</th>
+        <th>出版社</th>
+        <th>单价</th>
+        <th>剩余数量</th>
+        <th>购买</th>
+    </tr>
+
+    {% for bk in book_list %}
+    <tr>
+        <td>{{ bk.id }}</td>
+        <td>{{ bk.bookname }}</td>
+        <td>{{ bk.author }}</td>
+        <td>{{ bk.press }}</td>
+        <td>{{ bk.price }}</td>
+        <td>{{ bk.sum_quantity }}</td>
+        <td><input type="button" id="choose_{{ bk.id }}" value="购买"></td>
+    </tr>
+    {% endfor %}
+
+    </table>
+
+    <p> <span id="order_result"></span></p>
+    {#{% for bk in book_list %}#}
+    {#<p>result_{{ bk.id }}:<span id="order_result_{{ bk.id }}"></span></p>#}
+    {#{% endfor %}#}
+</center>
+
+
+{% if book_list.has_previous %}
+        <a class='paginator' title='上一页' href='?page={{ book_list.previous_page_number }}'><span>&lt;&lt;</span></a>
+ {% endif %}
+ {% for page in book_list.paginator.page_range %}
+{#     {% if page = book_list.number %}#}
+     {% ifequal page book_list.number %}
+         <a class='paginator_current' title='当前页:{{ page }}'><span>{{ page }}</span></a>
+     {% else %}
+         <a class='paginator' href='?page={{ page }}' title='{{ page }}'><span>{{ page }}</span></a>
+{#     {% endif %}#}
+     {% endifequal %}
+ {% endfor %}
+ {% if book_list.has_next %}
+     <a class='paginator' title='下一页' href='?page={{ book_list.next_page_number }}'><span>&gt;&gt;</span></a>
+ {% endif %}
+
+
+</body>
+</html>
+
+

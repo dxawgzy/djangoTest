@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>注册</title>
+
+{#<script>#}
+{#function showUsername(str)#}
+{#{#}
+{#var xmlhttp;#}
+{#if (str.length==0)#}
+{#  {#}
+{#  document.getElementById("username_result").innerHTML="";#}
+{#  return;#}
+{#  }#}
+{#if (window.XMLHttpRequest)#}
+{#  {// code for IE7+, Firefox, Chrome, Opera, Safari#}
+{#  xmlhttp=new XMLHttpRequest();#}
+{#  }#}
+{#else#}
+{#  {// code for IE6, IE5#}
+{#  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");#}
+{#  }#}
+{#xmlhttp.onreadystatechange=function()#}
+{#  {#}
+{#  if (xmlhttp.readyState==4 && xmlhttp.status==200)#}
+{#    {#}
+{#    document.getElementById("username_result").innerHTML=xmlhttp.responseText;#}
+{#    }#}
+{#  }#}
+{#xmlhttp.open("GET","/compare_username",true);#}
+{#xmlhttp.send();#}
+{#}#}
+{#</script>#}
+
+
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+{#        $('#username').mouseleave(function(){#}
+        $('#username').keyup(function(){
+            var username = $("#username").val();
+            $.get("/compare_username",{'username':username}, function(ret) {
+                $('#username_result').html(ret);
+            })
+        });
+
+        $('#confirm_password').keyup(function(){
+            var password = $("#password").val();
+            var confirm_password = $("#confirm_password").val();
+            $.get("/compare_password",{'password':password,'confirm_password':confirm_password}, function(ret) {
+                $('#password_result').html(ret);
+            })
+        });
+
+    });
+
+</script>
+
+</head>
+
+<body>
+<br><br><br>
+<center>
+    <p>用户注册</p>
+    <form name="registerForm" method="get" action="/register">
+{#        用&nbsp;户&nbsp;名:<input type="text" id="username" name="username" onkeyup="showUsername(this.value)">#}
+        用&nbsp;户&nbsp;名:<input type="text" id="username" name="username">
+                                                    <span id='username_result'></span><br>
+        密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:<input type="password" id="password" name="password"><br>
+        确认密码:<input type="password" id="confirm_password" name="confirm_password">
+                                                    <span id='password_result'></span><br>
+        姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:<input type="text" id="name" name="name"><br>
+        电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:<input type="text" id="telephone" name="telephone"
+                                                      onkeyup="this.value=this.value.replace(/\D/g, '')"><br>
+        邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱:<input type="text" id="email" name="email"><br>
+        地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:<input type="text" id="address" name="address"><br>
+        <input type="submit" name="register" id="register" value="注册">
+{#        <button type="button" id="register">注册</button>#}
+        <input type="reset" name="reset" id="reset" value="重置">
+
+  </form>
+  </center>
+</body>
+</html>
+
+

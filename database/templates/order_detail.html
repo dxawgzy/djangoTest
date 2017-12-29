@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+</head>
+<body>
+<h4>欢迎您，{{ user1.username }} &nbsp;&nbsp;<a href="{% url 'database.customer.logout' %}">退出</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'database.book.main_page' %}">返回主页</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'database.book.shopcart' %}">返回购物车</a></h4>
+<center>
+<p>订单详情</p>
+=======================================================
+<p>姓名: {{ user1.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话: {{ user1.telephone }}</p>
+<p>地址: {{ user1.address }}</p>
+<table border="1" align="center" width="700px" cellspacing=0 cellpadding=0>
+    <tr>
+{#        <th>编号</th>#}
+        <th>编号</th>
+        <th>书名</th>
+        <th>作者</th>
+        <th>出版社</th>
+        <th>单价</th>
+        <th>数量</th>
+    </tr>
+
+        {% for bk in bk_list %}
+    <tr>
+{#        <td>{{ bk }}</td>#}
+        <td>{{ bk.id }}</td>
+        <td>{{ bk.bookname }}</td>
+        <td>{{ bk.author }}</td>
+        <td>{{ bk.press }}</td>
+        <td>{{ bk.price }}</td>
+        <td>{{ bk.quantity }}</td>
+    </tr>
+{% endfor %}
+
+</table>
+<p>总金额: {{ sum }}</p>
+<p><input type="button" id="pay_money" value="支付"></p>
+</center>
+</body>
+</html>
+
+

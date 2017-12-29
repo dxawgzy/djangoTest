@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>购物车</title>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        {% for bk in bk_list %}
+            $("#delete_{{ bk.id }}").click(function(){
+                $.get("/delete_book",{'user_id':{{ user1.id }}, 'book_id':{{ bk.id }}}, function(ret) {
+                    $("#delete_result").html(ret);
+                });
+            });
+        {% endfor %}
+
+        $("#order_submit").click(function(){
+            $.post("/order_submit/",
+{#                  {'user1':{{ user1 }}, 'bk_list':{{ bk_list }}, 'sum':{{ sum }}},#}
+                  {user1:'{{ user1 }}', bk_list:'{{ bk_list }}', sum:'{{ sum }}'},
+                  function(){
+                      alert("success");
+            });
+        });
+    });
+
+</script>
+</head>
+<body>
+    <h4>欢迎您，{{ user1.username }} &nbsp;&nbsp;<a href="{% url 'database.customer.logout' %}">退出</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'database.book.main_page' %}">返回主页</a></h4>
+<center>
+    <form name="shopcartForm" action="/order_submit/" method="POST">
+    {% csrf_token %}
+    <p>购物车</p>
+    <table border="1" align="center" width="700px" cellspacing=0 cellpadding=0>
+
+    <tr>
+{#        <th>编号</th>#}
+        <th>编号</th>
+        <th>书名</th>
+        <th>作者</th>
+        <th>出版社</th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>删除</th>
+    </tr>
+
+    {% for bk in bk_list %}
+    <tr>
+{#        <td>{{ bk_list }}</td>#}
+        <td>{{ bk.id }}</td>
+        <td>{{ bk.bookname }}</td>
+        <td>{{ bk.author }}</td>
+        <td>{{ bk.press }}</td>
+        <td>{{ bk.price }}</td>
+        <td>{{ bk.quantity }}</td>
+        <td><input type="button" id="delete_{{ bk.id }}" value="删除"></td>
+    </tr>
+    {% endfor %}
+
+</table>
+<p><input type="hidden" name="bk_list" value="{{ bk_list }}"></p>
+<p> <span id="delete_result"></span></p>
+<p>总金额: {{ sum }}</p>
+<p><input type="hidden" name="sum" value="{{ sum }}"></p>
+{#<p><a href="{% url 'database.book.order_submit' %}"><input type="button" value="提交订单"></a></p>#}
+<p><input type="submit" id="order_submit" value="提交订单"></p>
+{#<p><input type="button" id="order_submit" value="提交订单"></p>#}
+
+</form>
+</center>
+
+{% include 'pagination02.html' %}
+
+</body>
+</html>
+
+

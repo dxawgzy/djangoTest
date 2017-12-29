@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<br/><br/><br/>
+<center>
+    <form name="loginForm" action="/login02/" method="POST">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td colspan="2" align="center"><b><font color="#0000FF">用户登录</font></b></td>
+      </tr>
+
+        <tr>
+          {{ form }}
+        </tr>
+{#      <tr>#}
+{#        <td><div align="right">用户名:</div></td>#}
+{#        <td><input type="text" name="username"></td>#}
+{#          <td><input type="text">{{ form.username }} </td>#}
+{#      </tr>#}
+{##}
+{#      <tr>#}
+{#        <td><div align="right">密&nbsp;&nbsp;&nbsp;码:</div></td>#}
+{#        <td><input type="password" name="password"></td>#}
+{#        <td><input type="password">{{ form.password }} </td>#}
+{#      </tr>#}
+
+      <tr>
+         <td>
+{#         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#}
+         <input type="submit" name="login" value="登录">
+         </td>
+         <td>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="reset" name="reset" value="重置">
+         </td>
+      </tr>
+    </table>
+  </form>
+  </center>
+</body>
+</html>
+

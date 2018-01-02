@@ -654,7 +654,6 @@ class RegisterView(View):
             pass_word = request.POST.get("password", "")
             is_user_exist = User.objects.filter(username=user_name) #判断用户是否已经存在
             if is_user_exist:
-                # return render(request, 'login.html', {'username': user_name, 'form': form})
                 return render(request, "register_echo.html", {"register_form": register_form, 'msg': u'用户名已存在'})
             # 实例化用户，然后赋值
             user_profile = User()

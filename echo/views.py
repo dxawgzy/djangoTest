@@ -640,6 +640,11 @@ from django.contrib.auth.hashers import make_password
 class RegisterView(View):
     def get(self, request):
         register_form = RegisterForm()
+        # 刷新验证码
+        if request.GET.get('newsn') == '1':
+            csn = CaptchaStore.generate_key()
+            cimageurl = captcha_image_url(csn)
+            return HttpResponse(cimageurl)
         return render(request, "register_echo.html", {'register_form':register_form})
     def post(self, request):
         register_form = RegisterForm(request.POST)

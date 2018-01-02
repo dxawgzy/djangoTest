@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -8,7 +9,7 @@
 <br/><br/><br/>
 <center>
 
-    <form id="email_register_form" method="post" action="{% url 'register_echo' %}" autocomplete="off">
+    <form id="email_register_form" method="post" action="{% url 'register_echo' %}" autocomplete="off"> {% csrf_token %}
         <div class="form-group marb8 {% if register_form.errors.username %}errorput{% endif %}">
             <label>用&nbsp;户&nbsp;名</label>
 {#            <input  type="text" id="id_username" name="username" value="{{ register_form.username.value }}" placeholder="请输入用户名" />#}
@@ -17,7 +18,7 @@
         <div class="form-group marb8 {% if register_form.errors.password %}errorput{% endif %}">
             <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
 {#            <input type="password" id="id_password" name="password"  value="{{ register_form.password.value }}" placeholder="请输入6-20位非中文字符密码" />#}
-            <input type="password" id="id_password" name="password"  value="{{ password }}">
+            <input type="password" id="id_password" name="password" value="{{ password }}">
         </div>
         <div class="form-group marb20 {% if register_form.errors.email %}errorput{% endif %}">
             <label>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
@@ -25,13 +26,10 @@
             <input  type="text" id="id_email" name="email" value="{{ email }}">
         </div>
         <div class="form-group marb8 captcha1 {% if register_form.errors.captcha %}errorput{% endif %}">
-{#            <label>验&nbsp;证&nbsp;码</label>#}
             {{ register_form.captcha }}
         </div>
 {#        <div class="error btns" id="jsEmailTips">{% for key,error in register_form.errors.items %}{{ error }}{% endfor %} {{ msg }}</div>#}
         <div style="color:#FF0000; padding-left:12px" class="error btns" id="jsEmailTips">{{ msg }}</div>
-        <div class="auto-box marb8">
-        </div>
         <input class="btn btn-green" id="jsEmailRegBtn" type="submit" value="注册并登录" />
         <td>
             <a href="{% url 'login' %}">登录</a>
@@ -39,10 +37,21 @@
          <td>
             <input type="reset" name="reset" value="重置">
          </td>
-        {% csrf_token %}
+
+        <script src="{%static 'assets/js/jquery.js'%}"></script>
+        <script type="text/javascript">
+            $('.captcha').click(function(){  //点击图片刷新
+                var tmp = Math.random().toString();
+                $.get("?newsn=1&tmp="+tmp, function(result){
+                    $('.captcha').attr("src", result);
+                    $('#id_captcha_0').attr("value", result.split('/')[3]);
+                });
+            return false;
+            });
+        </script>
+
     </form>
   </center>
-
 </body>
 </html>
 

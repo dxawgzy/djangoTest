@@ -86,7 +86,7 @@ def login(request):
                                       {'username': login_param['username'],
                                        'form': form,
                                        # 'err_message': u'密码已过期'})
-                                       'err_message': u'用户未激活'})
+                                       'err_message': u'用户未激活，请登录邮箱点击链接激活'})
                 # if user and user.is_active:
                 #     auth_login(request, user)
                 #     return HttpResponseRedirect('/index')

@@ -3,12 +3,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>注册</title>
 </head>
 <body>
 <br/><br/><br/>
 <center>
-
+    <div class="center">
+        <h3><span class="white">用户注册</span></h3>
+    </div>
     <form id="email_register_form" method="post" action="{% url 'register_echo' %}" autocomplete="off"> {% csrf_token %}
         <div class="form-group marb8 {% if register_form.errors.username %}errorput{% endif %}">
             <label>用&nbsp;户&nbsp;名</label>

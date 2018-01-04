@@ -60,7 +60,8 @@
             </div>
            <div class="infobox-data">
               <span class="infobox-data-number">{{ task_complete }}</span>
-              <div class="infobox-content"><a href="{% url 'task_list' %}">任务完成数</a></div>
+{#              <div class="infobox-content"><a href="{% url 'task_list' %}">任务完成数</a></div>#}
+              <div class="infobox-content"><a href="{% url 'task_list' %}?task_status=已结单">任务完成数</a></div>
            </div>
         </div>
 

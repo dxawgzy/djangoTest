@@ -48,22 +48,21 @@
 {#                    });#}
 {#                return false;#}
 {#                });#}
-                $('.captcha').click(function(){  //点击图片刷新
-                    var tmp = Math.random().toString();
-                    $.get("?newsn=1&tmp="+tmp, function(result){
-                        $('.captcha').attr("src", result);
-                        $('#id_captcha_0').attr("value", result.split('/')[3]);
-                    });
-                return false;
-                });
-{#                $('.captcha').click(function(){  //ajax刷新#}
-{#                    console.log('click');#}
-{#                     $.getJSON("/captcha/refresh/",#}
-{#                          function(result){#}
-{#                         $('.captcha').attr('src', result['image_url']);#}
-{#                         $('#id_captcha_0').val(result['key'])#}
-{#                      });#}
+{#                $('.captcha').click(function(){  //点击图片刷新#}
+{#                    var tmp = Math.random().toString();#}
+{#                    $.get("?newsn=1&tmp="+tmp, function(result){#}
+{#                        $('.captcha').attr("src", result);#}
+{#                        $('#id_captcha_0').attr("value", result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
 {#                });#}
+                $('.captcha').click(function(){  //ajax刷新
+                    console.log('click');
+                     $.getJSON("/captcha/refresh/", function(result){
+                         $('.captcha').attr('src', result['image_url']);
+                         $('#id_captcha_0').val(result['key'])
+                      });
+                });
             </script>
 
         </form>

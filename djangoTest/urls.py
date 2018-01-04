@@ -62,35 +62,22 @@ urlpatterns = [
     url(r'^index/', echo_views.index, name='index'),
     url(r'^edit/(?P<table>\w+)/(?P<pk>\d+)/$', echo_views.edit, name='edit'),
     url(r'^delete/(?P<table>\w+)/(?P<pk>\d+)/$', echo_views.delete, name='delete'),
-
-    #任务列表
     url(r'^task_list/', echo_views.task_list, name='task_list'),
     url(r'^task_add/', echo_views.task_add, name='task_add'),
     url(r'^task_edit/(?P<pk>\d+)/$', echo_views.task_edit, name='task_edit'),
     url(r'^task_delete/(?P<pk>\d+)/$', echo_views.task_delete, name='task_delete'),
-    #实施步骤
-    url(r'^process_edit/(?P<pk>\d+)/$', echo_views.process_edit, name='process_edit'),
+    url(r'^process_edit/(?P<pk>\d+)/$', echo_views.process_edit, name='process_edit'),  #实施步骤
     url(r'^process_delete/(?P<pk>\d+)/$',echo_views.process_delete, name='process_delete'),
-
-    #用户登陆
     url(r'^login/', echo_views.login, name='login'),
-    #用户退出
     url(r'^logout/', echo_views.logout, name='logout'),
-    #密码修改
     url(r'^password_change/', echo_views.password_change, name='password_change'),
-    #注册
-    # url(r'^register02/', echo_views.register, name='register'),
     url(r'^register_echo/', RegisterView.as_view(), name='register_echo'),
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name="user_active"),  # 提取出active后的所有字符赋给active_code
-
-    #上传附件
-    url(r'^upload_file/(?P<pk>\d+)/$', echo_views.upload_file, name='upload_file'),
-    #结束任务
-    url(r'^task_finish/(?P<pk>\d+)/$', echo_views.task_finish, name='task_finish'),
-
+    url(r'^upload_file/(?P<pk>\d+)/$', echo_views.upload_file, name='upload_file'),  #上传附件
+    url(r'^task_finish/(?P<pk>\d+)/$', echo_views.task_finish, name='task_finish'),  #结束任务
     url(r'^jscal2/$', echo_views.jscal2, name='jscal2'),
-    #验证码
-    url(r'^captcha/', include('captcha.urls')),
+    url(r'^captcha/', include('captcha.urls')),  #验证码模块
+    url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  # 动态验证验证码
 
     #测试专用
     url(r'^test_lists/(?P<table>\w+)/$', echo_test.test_lists, name='test_lists'),

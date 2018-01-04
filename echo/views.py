@@ -20,7 +20,6 @@ from captcha.helpers import captcha_image_url
 # Create your views here.
 
 
-#用户登陆选项，所有的函数将会返回一个template_response的实例，用来描绘页面，同时你也可以在return之前增加一些特定的功能
 #用户登陆
 def login02(request):
     #extra_context是一个字典，它将作为context传递给template，这里告诉template成功后跳转的页面将是/index
@@ -481,7 +480,6 @@ def task_add(request):
 def task_edit(request, pk):
     #获取相关任务实例
     task_ins = get_object_or_404(Task, pk=pk)
-    #如果收到了相应的POST提交
     if request.method == 'POST':
         #任务联系人为可编辑选项，并填充原先的任务联系人
         task_ins.task_contacts = request.POST['task_contacts']
@@ -511,7 +509,6 @@ def task_edit(request, pk):
 def task_delete(request, pk):
     #获取选定的task实例
     task_ins = get_object_or_404(Task, pk=pk)
-    #如果接收到了删除的POST提交，则删除相应条目
     if request.method == 'POST':
         try:
             task_ins.delete()
@@ -529,7 +526,6 @@ def task_delete(request, pk):
 def process_edit(request, pk):
     #获取相应的实施步骤
     process_ins = get_object_or_404(Process, pk=pk)
-    #如果收到了POST提交
     if request.method == 'POST':
         #调用process的form
         form = ProcessForm(request.POST)
@@ -637,7 +633,7 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 from email_send import send_register_email
 from django.contrib.auth.hashers import make_password
-class RegisterView(View):
+class RegisterView(View):   # 注册
     def get(self, request):
         register_form = RegisterForm()
         # 刷新验证码
@@ -673,7 +669,7 @@ class RegisterView(View):
             # form表单验证失败，将错误信息传给前端
             return render(request, "register_echo.html", {"register_form": register_form, 'msg': u'注册失败'})
 
-class ActiveUserView(View):
+class ActiveUserView(View):   # 注册的用户通过邮件激活
     def get(self, request, active_code):
     # 用code在数据库中过滤处信息
         all_records = EmailVerifyRecord.objects.filter(code=active_code)
@@ -692,4 +688,18 @@ class ActiveUserView(View):
         form = CaptchaForm()
         # return render(request, "login.html")
         return render(request, 'login.html', {'username': username, 'form': form})
+
+def ajax_val(request):   # 动态验证验证码（焦点离开验证码输入框时验证）
+    if  request.is_ajax():
+        cs = CaptchaStore.objects.filter(response=request.GET['response'],
+                                     hashkey=request.GET['hashkey'])
+        if cs:
+            json_data={'status':1}
+        else:
+            json_data = {'status':0}
+        return JsonResponse(json_data)
+    else:
+        # raise Http404
+        json_data = {'status':0}
+        return JsonResponse(json_data)
 

@@ -12,7 +12,7 @@
         <h3><span class="white">用户登录</span></h3>
     </div>
     <table>
-       <form  class="mb10" action="/login/" method="post"> {% csrf_token %}
+       <form  class="mb10" action="{% url 'login' %}" method="post"> {% csrf_token %}
             <div class="input-group">
                 <label>用&nbsp;户&nbsp;名</label>
                 <input type="text" class="form-control" name="username" value="{{ username }}">
@@ -71,14 +71,16 @@
                     }
                     $.getJSON('/ajax_val', json_data, function(data){ //ajax发送
                         $('#captcha_status').remove()
-                        if(data['status']){   //status返回1为验证码正确， status返回0为验证码错误，在输入框的后面写入提示信息
-                            $('#id_captcha_1').after('<span id="captcha_status" style="color:blue">验证码正确</span>')
-                        }else{
-                             $('#id_captcha_1').after('<span id="captcha_status" style="color:red">验证码错误</span>')
+{#                        if(data['status']){   //status返回1为验证码正确， status返回0为验证码错误，在输入框的后面写入提示信息#}
+{#                            $('#id_captcha_1').after('<span id="captcha_status" style="color:blue">验证码正确</span>')#}
+{#                        }else{#}
+{#                             $('#id_captcha_1').after('<span id="captcha_status" style="color:red">验证码错误</span>')#}
+{#                        }#}
+                        if(!data['status']){   //验证码正确时不显示提示信息
+                            $('#id_captcha_1').after('<p id="captcha_status" style="color:red">验证码错误</p>')
                         }
                     });
                 });
-
             </script>
 
         </form>

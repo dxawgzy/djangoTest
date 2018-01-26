@@ -77,7 +77,8 @@ urlpatterns = [
     url(r'^task_finish/(?P<pk>\d+)/$', echo_views.task_finish, name='task_finish'),  #结束任务
     url(r'^jscal2/$', echo_views.jscal2, name='jscal2'),
     url(r'^captcha/', include('captcha.urls')),  #验证码模块
-    url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  # 动态验证验证码
+    url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  #动态验证验证码
+    url('^forget_passwd/', echo_views.forget_passwd, name='forget_passwd'),  #找回密码
 
     #测试专用
     url(r'^test_lists/(?P<table>\w+)/$', echo_test.test_lists, name='test_lists'),

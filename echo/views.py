@@ -26,7 +26,6 @@ def login02(request):  #用户登陆
     return template_response
 
 def login04(request):
-    form = LoginForm(request.POST or None)
     form = LoginForm()
     if request.method == 'GET':
         if request.GET.get('newsn') == '1':  #刷新验证码
@@ -552,3 +551,5 @@ def ajax_val(request):  #动态验证验证码（焦点离开验证码输入框�
         json_data = {'status':0}
         return JsonResponse(json_data)
 
+def forget_passwd(request):
+    return render(request, 'forget_passwd.html')

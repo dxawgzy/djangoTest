@@ -140,6 +140,7 @@
         <!-- PAGE TABLES BEGINS -->
 
         <div class="col-xs-12">
+            <a href="{% url 'task_add'%}"><input class='btn btn-primary' type='button' value='新建任务' /></a>
             <div class="table-header">
                 {{ result }}
             </div>
@@ -153,12 +154,13 @@
                         <th>任务状态</th>
                         <th>创建人</th>
                         <th>创建时间</th>
-                        <th>
-                            <a class="blue" href="{% url 'task_add'%}">
-                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                新建任务
-                            </a>
-                        </th>
+{#                        <th>#}
+{#                            <a class="blue" href="{% url 'task_add'%}">#}
+{#                                <i class="ace-icon fa fa-search-plus bigger-130"></i>#}
+{#                                新建任务#}
+{#                            </a>#}
+{#                        </th>#}
+                        <th>操作</th>
                     </thead>
                     <tbody>
                         {% for item in data %}
@@ -172,22 +174,38 @@
                                 <td>{{ item.task_signer }}</td>
                                 <td>{{ item.task_signtime }}</td>
                                 <td>
-                                    <div class="hidden-sm hidden-xs action-buttons">
-                                        <a class="green" href="{% url 'task_edit' item.id %}" title="编辑任务">
-                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                    <!--页面扩展时的按钮布局-->
+{#                                    <div class="hidden-sm hidden-xs action-buttons">#}
+{#                                        <a class="green" href="{% url 'task_edit' item.id %}" title="编辑任务">#}
+{#                                            <i class="ace-icon fa fa-pencil bigger-130"></i>#}
+{#                                        </a>#}
+{##}
+{#                                        <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务{{ item.task_title }}吗？" title="删除任务" >#}
+{#                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>#}
+{#                                        </a>#}
+{#                                    </div>#}
+                                    <div class="btn-group">
+{#                                        <button data-toggle="dropdown" class="btn btn-minier dropdown-toggle">#}
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                            <i class="ace-icon fa fa-cog blue bigger-130"></i>
                                         </a>
+{#                                        </button>#}
+                                        <ul class="dropdown-menu dropdown-only-icon">
+                                            <li>
+                                              <a href="{% url 'task_edit' item.id %}">编辑任务</a>
+                                            </li>
+                                            <li>
+                                                <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务{{ item.task_title }}吗？">删除任务</a>
+                                            </li>
+                                        </ul>
+                                    </div><!-- /.btn-group -->
 
-                                        <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务{{ item.task_title }}吗？" title="删除任务" >
-                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                        </a>
-                                    </div>
-
+                                    <!--页面收缩时的按钮布局-->
                                     <div class="hidden-md hidden-lg">
                                         <div class="inline position-relative">
                                             <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
                                                 <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
                                             </button>
-
                                             <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                                 <li>
                                                     <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
@@ -196,7 +214,6 @@
                                                         </span>
                                                     </a>
                                                 </li>
-
                                                 <li>
                                                     <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                         <span class="green">
@@ -204,7 +221,6 @@
                                                         </span>
                                                     </a>
                                                 </li>
-
                                                 <li>
                                                     <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
                                                         <span class="red">

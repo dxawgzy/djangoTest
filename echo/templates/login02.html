@@ -1,0 +1,94 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<br/><br/><br/>
+<center>
+    <div class="center">
+        <h3><span class="white">用户登录</span></h3>
+    </div>
+    <table>
+       <form  class="mb10" action="{% url 'login' %}" method="post"> {% csrf_token %}
+            <div class="input-group">
+                <label>用&nbsp;户&nbsp;名</label>
+                <input type="text" class="form-control" name="username" value="{{ username }}">
+            </div>
+            <div class="input-group">
+                <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <div class="input-group" style="width: 100%">
+                {{ form.captcha }}
+{#                <button id='js-captcha-refresh' type="button">刷新验证码</button>#}
+            </div>
+            <div style="color:#FF0000; padding-left:12px">{{ err_message }}</div>
+            <tr>
+                 <td>
+                    <input type="submit" name="login" value="登录">
+                 </td>
+                 <td>
+                    <input type="reset" name="reset" value="重置">
+                 </td>
+                 <td>
+                    <a href="{% url 'register_echo' %}">注册</a>
+                 </td>
+                 <td>
+                    <a href="{% url 'forget_passwd' %}">忘记密码</a>
+                 </td>
+            </tr>
+
+           <script src="{%static 'assets/js/jquery.js'%}"></script>
+           <script type="text/javascript">
+{#                $('#js-captcha-refresh').click(function(){  //点击按钮刷新#}
+{#                    $.get("?newsn=1", function(result){#}
+{#                        alert(result);#}
+{#                        $('.captcha').attr("src",result);#}
+{#                        $('#id_captcha_0').attr("value",result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
+{#                });#}
+{#                $('.captcha').click(function(){  //点击图片刷新#}
+{#                    var tmp = Math.random().toString();#}
+{#                    $.get("?newsn=1&tmp="+tmp, function(result){#}
+{#                        $('.captcha').attr("src", result);#}
+{#                        $('#id_captcha_0').attr("value", result.split('/')[3]);#}
+{#                    });#}
+{#                return false;#}
+{#                });#}
+                $('.captcha').click(function(){  //ajax刷新
+                    console.log('click');
+                     $.getJSON("/captcha/refresh/", function(result){
+                         $('.captcha').attr('src', result['image_url']);
+                         $('#id_captcha_0').val(result['key'])
+                      });
+                });
+
+                $('#id_captcha_1').blur(function(){  // ajax动态验证  #id_captcha_1为输入框的id，当该输入框失去焦点是触发函数
+                    json_data={
+                        'response':$('#id_captcha_1').val(),  //获取输入框和隐藏字段id_captcha_0的数值
+                        'hashkey':$('#id_captcha_0').val()
+                    }
+                    $.getJSON('/ajax_val', json_data, function(data){ //ajax发送
+                        $('#captcha_status').remove()
+{#                        if(data['status']){   //status返回1为验证码正确， status返回0为验证码错误，在输入框的后面写入提示信息#}
+{#                            $('#id_captcha_1').after('<span id="captcha_status" style="color:blue">验证码正确</span>')#}
+{#                        }else{#}
+{#                             $('#id_captcha_1').after('<span id="captcha_status" style="color:red">验证码错误</span>')#}
+{#                        }#}
+                        if(!data['status']){   //验证码正确时不显示提示信息
+                            $('#id_captcha_1').after('<p id="captcha_status" style="color:red">验证码错误</p>')
+                        }
+                    });
+                });
+            </script>
+
+        </form>
+    </table>
+  </center>
+</body>
+</html>
+

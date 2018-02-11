@@ -553,3 +553,14 @@ def ajax_val(request):  #动态验证验证码（焦点离开验证码输入框�
 
 def forget_passwd(request):
     return render(request, 'forget_passwd.html')
+
+def map(request):  #百度地图
+    if request.method == 'GET':
+        address =  request.GET.get('address')
+    context = {
+        'head_title': '地图',
+        'address': address
+    }
+    return render(request, 'baidu_map.html', context)
+
+

@@ -1,0 +1,39 @@
+{%  extends "index.html" %}
+
+{% block page_css %}
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PBSDLZoAAgTatIMGIAGfndVWs2e6OeMk"></script>
+{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'faq' %}">FAQ</a>
+{% endblock %}
+
+{% block container %}
+
+    <div class="row">
+        <div class="col-xs-6">
+            <form  class="mb10" action="{% url 'faq' %}" method="post">{% csrf_token %}
+{#            <form  class="mb10" action="" method="get">#}
+                <div class="col-sm-3">
+                    <div class="input-group">
+{#                        <input type="text" class="form-control" placeholder="请输入地点" name="address" value="{{ address }}">#}
+                        <input type="text" class="form-control" placeholder="请输入" name="message"
+                            {% if request.POST.message %} value = {{ request.POST.message }}{% endif %}>
+                    </div>
+                </div>
+
+                <div class="col-sm-0">
+                  <span class="input-group-btn">
+                      <button type="submit" class="btn btn-purple btn-sm">
+                          提交
+                          <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                      </button>
+                  </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    机器人回复：<div style="color:#FF0000; padding-left:12px">{{ reply_message }}</div>
+
+{% endblock %}
+

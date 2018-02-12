@@ -17,6 +17,7 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 from email_send import send_register_email
 from django.contrib.auth.hashers import make_password, check_password
+import requests
 
 # Create your views here.
 
@@ -562,5 +563,35 @@ def map(request):  #百度地图
         'address': address
     }
     return render(request, 'baidu_map.html', context)
+
+def faq(request):  #图灵机器人
+    tuling_key = "5b50e5980c24483088a1129f18abec58"
+    url = "http://www.tuling123.com/openapi/api"
+    if request.method == 'POST':
+        msg =  request.POST.get('message')
+        # username = request.user  #获取当前登录的用户名
+        # user_id = username.replace('@', '')[:30]
+        user_id = "123sfdfdfs"
+        body = {'key': tuling_key, 'info': msg.encode('utf8'), 'userid': user_id}
+        r = requests.post(url, data=body)
+        respond = json.loads(r.text)
+        result = ''
+        if respond['code'] == 100000:
+            result = respond['text'].replace('<br>', '  ')
+            result = result.replace(u'\xa0', u' ')
+        elif respond['code'] == 200000:
+            result = respond['url']
+        elif respond['code'] == 302000:
+            for k in respond['list']:
+                result = result + u"【" + k['source'] + u"】 " +\
+                    k['article'] + "\t" + k['detailurl'] + "\n"
+        else:
+            result = respond['text'].replace('<br>', '  ')
+            result = result.replace(u'\xa0', u' ')
+        return render(request, 'faq.html', {'reply_message': result})
+    context = {
+        'head_title': 'FAQ',
+    }
+    return render(request, 'faq.html', context)
 
 

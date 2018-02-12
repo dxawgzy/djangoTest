@@ -80,6 +80,7 @@ urlpatterns = [
     url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  #动态验证验证码
     url('^forget_passwd/', echo_views.forget_passwd, name='forget_passwd'),  #找回密码
     url('^map/', echo_views.map, name='map'),  #百度地图
+    url('^faq/', echo_views.faq, name='faq'),  #图灵机器人
 
     #测试专用
     url(r'^test_lists/(?P<table>\w+)/$', echo_test.test_lists, name='test_lists'),

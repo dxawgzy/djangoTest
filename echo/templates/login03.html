@@ -1,0 +1,85 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用户登录</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="{%static 'assets/css/bootstrap.css'%}" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="{%static 'assets/css/font-awesome.css'%}" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+
+<body style="background-color: #E2E2E2;">
+    <div class="container">
+        <div class="row text-center " style="padding-top:100px;">
+            <div class="col-md-12">
+                <img src="{%static 'assets/img/logo-invoice.png'%}" />
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                <div class="panel-body">
+                    <form  class="mb10" action="{% url 'login' %}" method="post"> {% csrf_token %}
+                        <hr/>
+                        <h5>用户登录</h5>
+                           <br/>
+                         <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                                <input type="text" class="form-control" name="username" placeholder="用户名"/>
+                            </div>
+                          <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                <input type="password" class="form-control" name="password" placeholder="密码"/>
+                          </div>
+                        <div class="form-group input-group">
+                            {{ form.captcha }}
+                        </div>
+                        <div style="color:#FF0000; padding-left:12px">{{ err_message }}</div>
+
+                        <div class="form-group">
+                            <label class="checkbox-inline">
+                                <input type="checkbox"/>记住我
+                            </label>
+                            <span class="pull-right">
+                                   <a href="{% url 'forget_passwd' %}">忘记密码?</a>
+                            </span>
+                        </div>
+
+                       <button type="submit" class="btn btn-primary" name="login">登录</button>
+                        <hr/>
+                        没有注册? <a href="{% url 'register_echo' %}">点击此处注册</a>
+                    </form>
+
+                    <script src="{%static 'assets/js/jquery.js'%}"></script>
+                    <script type="text/javascript">
+                        $('.captcha').click(function(){  //ajax刷新
+                            console.log('click');
+                             $.getJSON("/captcha/refresh/", function(result){
+                                 $('.captcha').attr('src', result['image_url']);
+                                 $('#id_captcha_0').val(result['key'])
+                              });
+                        });
+                        $('#id_captcha_1').blur(function(){  // ajax动态验证  #id_captcha_1为输入框的id，当该输入框失去焦点是触发函数
+                            json_data={
+                                'response':$('#id_captcha_1').val(),  //获取输入框和隐藏字段id_captcha_0的数值
+                                'hashkey':$('#id_captcha_0').val()
+                            }
+                            $.getJSON('/ajax_val', json_data, function(data){ //ajax发送
+                                $('#captcha_status').remove()
+                                if(!data['status']){   //验证码正确时不显示提示信息
+                                    $('#id_captcha_1').after('<p id="captcha_status" style="color:red">验证码错误</p>')
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

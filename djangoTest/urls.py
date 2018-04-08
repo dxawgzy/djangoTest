@@ -25,8 +25,6 @@ from database import search, search2, customer, book
 from echo import views as echo_views
 from echo.views import RegisterView, ActiveUserView
 
-from echo import tests as echo_test
-
 urlpatterns = [
     # url(r'^$', first_views.index),   # 127.0.0.1:8000
     # url(r'^$', learn_views.home, name='home'),
@@ -80,12 +78,9 @@ urlpatterns = [
     url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  #动态验证验证码
     url('^forget_passwd/', echo_views.forget_passwd, name='forget_passwd'),  #找回密码
     url('^map/', echo_views.map, name='map'),  #百度地图
+    url('^ocr/', echo_views.ocr, name='ocr'),  #百度OCR文字识别
+    url('^tencent/', echo_views.tencent, name='tencent'),  #腾讯AI
     url('^faq/', echo_views.faq, name='faq'),  #图灵机器人
-
-    #测试专用
-    url(r'^test_lists/(?P<table>\w+)/$', echo_test.test_lists, name='test_lists'),
-    url(r'^testpage1/', echo_test.testpage1, name='testpage1'),
-
 
 ]
 

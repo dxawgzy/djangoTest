@@ -1,0 +1,31 @@
+{%  extends "index.html" %}
+
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block page_css %}
+{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'ocr' %}">OCR</a>
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-xs-6">
+            <form enctype="multipart/form-data" method="POST" action="">{% csrf_token %}
+{#                {{ form }}#}
+                <div class='span two xs-three strong'>
+                    <a href="javascript:;" class="input-file">
+                        <input type="file" name="upimage" id="upload_file">&nbsp;
+                    </a>
+                </div>
+                <div class='span five xs-three' id="update_file_label"></div>
+                <input type="submit" value="上传文件"/>
+            </form>
+            识别结果：<div style="color:#FF0000; padding-left:12px">{{ reply_message }}</div>
+        </div>
+    </div>
+
+{% endblock %}
+

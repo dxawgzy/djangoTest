@@ -594,7 +594,7 @@
 {#					</li>#}
 
                     <!--如果相关路径在请求路径中，那么一下li class为active open -->
-                    {% if '/map/' in request.path or '/faq/' in request.path %}
+                    {% if '/map/' in request.path or '/ocr/' in request.path or '/tencent/' in request.path  or '/faq/' in request.path or '/grafana/' in request.path %}
                        <li class="active open" >
                     {% else %}
                         <li class="">
@@ -625,6 +625,30 @@
                                 <b class="arrow"></b>
                             </li>
 
+                            {% if '/ocr/' in request.path %}
+                                <li class="active" >
+                            {% else %}
+                                <li class="">
+                            {% endif %}
+                                <a href="{% url 'ocr'%}">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    百度OCR
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                            {% if '/tencent/' in request.path %}
+                                <li class="active" >
+                            {% else %}
+                                <li class="">
+                            {% endif %}
+                                <a href="{% url 'tencent'%}">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    腾讯AI
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
                             {% if '/faq/' in request.path %}
                                 <li class="active" >
                             {% else %}
@@ -632,7 +656,19 @@
                             {% endif %}
 								<a href="{% url 'faq' %}">
 									<i class="menu-icon fa fa-caret-right"></i>
-									FAQ
+									图灵FAQ
+								</a>
+								<b class="arrow"></b>
+							</li>
+
+                            {% if '/grafana/' in request.path %}
+                                <li class="active" >
+                            {% else %}
+                                <li class="">
+                            {% endif %}
+								<a href="http://192.168.126.189:3000" target="_blank">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Grafana
 								</a>
 								<b class="arrow"></b>
 							</li>

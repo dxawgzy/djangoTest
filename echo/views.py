@@ -5,9 +5,9 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-import time
+import time, urllib, hashlib
 from echo.models import Node, Line, Device, Task, Process, Upload, EmailVerifyRecord
-from echo.upload import handle_uploaded_file
+from echo.upload import handle_uploaded_file, pic_base64
 from echo.forms import NodeForm, LineForm, DeviceForm, TaskForm, ProcessForm, UploadFileForm, LoginForm, CaptchaForm, RegisterForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
@@ -525,22 +525,19 @@ class RegisterView(View):   #用户注册
 
 class ActiveUserView(View):  #注册的用户通过邮件激活
     def get(self, request, active_code):
-        all_records = EmailVerifyRecord.objects.filter(code=active_code)  #用code在数据库中过滤处信息
+        all_records = EmailVerifyRecord.objects.filter(code=active_code)  #用code在数据库中过滤出信息
         if all_records:
             for record in all_records:
-                # email = record.email
-                # user = User.objects.get(email=email)  #通过邮箱查找到对应的用户
                 username = record.username
                 user = User.objects.get(username=username)
                 user.is_active = True  #激活用户
                 user.save()
         else:
             return render(request, "active_fail.html")
-        form = CaptchaForm()
-        return render(request, 'login.html', {'username': username, 'form': form})
+        return render(request, "active_success.html")
 
 def ajax_val(request):  #动态验证验证码（焦点离开验证码输入框时验证）
-    if  request.is_ajax():
+    if request.is_ajax():
         cs = CaptchaStore.objects.filter(response=request.GET['response'],
                                          hashkey=request.GET['hashkey'])
         if cs:
@@ -559,13 +556,95 @@ def map(request):  #百度地图
     if request.method == 'GET':
         address =  request.GET.get('address')
     context = {
-        'head_title': '地图',
+        'head_title': '百度地图',
         'address': address
     }
     return render(request, 'baidu_map.html', context)
 
+
+import urllib, urllib2, base64
+def ocr(request):  #百度OCR文字识别
+    access_token = "xxx"
+    url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
+    # url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
+    # params = {
+    #     'image': '',
+    #     # 'language_type': 'CHN_ENG',
+    #     # 'detect_direction': 'false',
+    #     # 'detect_language': 'false',
+    #     # 'probability': 'false',
+    # }
+    if request.method == 'POST':
+        # form = UploadFileForm(request.POST, request.FILES)  #获取form表单，request.FILES是存放文件的地方
+        # if form.is_valid():
+            # f = open(request.FILES['file'], 'rb')
+            # uf = pic_base64(request.FILES['file'])  #通过处理上传文件函数来获得返回值
+            # img = base64.b64encode(f.read())
+        img = request.POST.get("base64_output", "")
+        params = {"image": img}
+        params = urllib.urlencode(params)
+        request1 = urllib2.Request(url, params)
+        request1.add_header('Content-Type', 'application/x-www-form-urlencoded')
+        response = urllib2.urlopen(request1)
+        content = response.read()
+        print (content)
+        result = content['words_result']
+        # r = requests.post(url, data=params)
+        # respond = json.loads(r.text)
+        # result = respond['words_result']
+        return render(request, 'baidu_ocr.html', {'reply_message': content})
+    else:
+        form = UploadFileForm()
+    context = {
+        'head_title': '百度OCR',
+        'form': form,
+    }
+    return render(request, 'baidu_ocr.html', context)
+
+
+from random import Random  #用于生成指定长度随机字符串
+def random_str(randomlength=10):
+    str = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars) - 1
+    random = Random()
+    for i in range(randomlength):
+        str+=chars[random.randint(0, length)]
+    return str
+
+def tencent(request):  #腾讯AI
+    url = "https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat"
+    app_key = "xxx"
+    if request.method == 'POST':
+        params = {
+            'app_id': '1106664443',
+            'time_stamp': int(time.time()),  #获取当前时间戳，保留整数
+            'nonce_str': random_str(),  # 随机字符串
+            'session': '腾讯AI开放平台',
+            'question': request.POST.get('message'),
+            # 'sign': '',  #此条目不不参加get_sign中的计算
+        }
+        pa = sorted(params.items()) #按字典key首字母升序排列
+        pa.append(('app_key',app_key))
+        str1 = urllib.urlencode(pa).encode()
+        sha = hashlib.md5()
+        sha.update(str1)
+        md5text = sha.hexdigest().upper()
+        params['sign'] = md5text
+        r = requests.post(url, data=params)
+        respond = json.loads(r.text)
+        if respond['ret'] ==0:
+            result = respond['data']['answer']
+        else:
+            result = respond['msg']
+        return render(request, 'tencent_ai.html', {'reply_message': result})
+    context = {
+        'head_title': '腾讯AI',
+    }
+    return render(request, 'tencent_ai.html', context)
+
 def faq(request):  #图灵机器人
-    tuling_key = "5b50e5980c24483088a1129f18abec58"
+    tuling_key = "xxx"
     url = "http://www.tuling123.com/openapi/api"
     if request.method == 'POST':
         msg =  request.POST.get('message')
@@ -580,17 +659,21 @@ def faq(request):  #图灵机器人
             result = respond['text'].replace('<br>', '  ')
             result = result.replace(u'\xa0', u' ')
         elif respond['code'] == 200000:
-            result = respond['url']
+            result = respond['text'].replace('<br>', '  ') +": " + respond['url']
         elif respond['code'] == 302000:
             for k in respond['list']:
                 result = result + u"【" + k['source'] + u"】 " +\
                     k['article'] + "\t" + k['detailurl'] + "\n"
+        elif respond['code'] == 308000:
+            for k in respond['list']:
+                result = result + u"【" + k['name'] + u"】 " +\
+                    k['icon'] + u" k['name'] " + "\t" + k['detailurl'] + "\n"
         else:
             result = respond['text'].replace('<br>', '  ')
             result = result.replace(u'\xa0', u' ')
         return render(request, 'faq.html', {'reply_message': result})
     context = {
-        'head_title': 'FAQ',
+        'head_title': '图灵FAQ',
     }
     return render(request, 'faq.html', context)
 

@@ -6,5 +6,45 @@
 </head>
 <body>
 
+    <div class="tab-cont jmod-ocr-id" style="display: block;">
+    <div class="demo-opt demo-box demo-box-sm jmod-uploader-wrapper">
+    <div id="preview" class="img-preview jmod-preview">
+    <label>原始图片</label>
+    <img src="//yyb.gtimg.com/aiplat/static/ai-demo/large/odemo-pic-1.jpg" style="width: auto; height: 100%; margin-top: 0px;"/>
+    <p class="err-tip jmod-err-tip"/>
+    <div class="jmod-img-result" style="display:inline-block;"/>
+    </div>
+    <div class="form-row">
+    <span class="btn btn-upload jmod-upload-disable disabled hidden">本地上传</span>
+    <input id="file_1" class="inputfile jmod-file" name="file" type="file"/>
+    <label class="btn btn-upload jmod-upload" for="file_1">本地上传</label>
+    <label>或</label>
+    <span class="imgurl">
+    <div class="ui-input">
+    <a class="btn btn-test jmod-detect" href="javascript:void(0);">检测</a>
+    </span>
+    </div>
+    <p class="tips">提示：图片大小不超过1M，请保证需要识别部分为图片主体部分</p>
+    </div>
+    <div class="demo-rs demo-box demo-box-sm jmod-result-wrapper">
+    </div>
+
+    <div class="demo-rs demo-box demo-box-sm jmod-result-wrapper">
+    <div class="jmod-result">
+    <label class="demo-rs-label">识别结果</label>
+    <div class="sec sec-txt">
+    <p>姓名：李明</p>
+    <p>性别：男</p>
+    <p>民族：汉</p>
+    <p>出生：1987/1/1</p>
+    <p>住址：北京市石景山区高新技术园腾讯大楼</p>
+    <p>身份号码：440524198701010014</p>
+    </div>
+    </div>
+    <div class="ui-loading jmod-result-loading hidden">
+    </div>
+    </div>
+    </div>
+
 </body>
 </html>

@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{%  extends "index.html" %}
 
-</body>
-</html>
+{% block page_css %}
+{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'tencent' %}">Tencent</a>
+{% endblock %}
+
+{% block container %}
+
+    <div class="row">
+        <div class="col-xs-6">
+            <form  class="mb10" action="{% url 'tencent' %}" method="post">{% csrf_token %}
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入" name="message"
+                            {% if request.POST.message %} value = {{ request.POST.message }}{% endif %}>
+                    </div>
+                </div>
+
+                <div class="col-sm-0">
+                  <span class="input-group-btn">
+                      <button type="submit" class="btn btn-purple btn-sm">
+                          提交
+                          <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                      </button>
+                  </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    机器人回复：<div style="color:#FF0000; padding-left:12px">{{ reply_message }}</div>
+
+{% endblock %}
+

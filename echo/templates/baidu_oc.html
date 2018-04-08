@@ -1,10 +1,122 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<head>
+<script src="http://static.xpcha.com/js/common.js?s=71"></script>
+<link href="http://static.xpcha.com/css/2017/body2017.css?s=72" rel="stylesheet" />
+<link href="http://static.xpcha.com/css/2017/xuexi2017.css?s=32" rel="stylesheet" />
+<title>base64 转图片 在线解码编码</title>
+{#<script type="text/javascript" src="./base64.js"></script>#}
+<script type="text/javascript" src="{%static 'assets/js/base64.js'%}"></script>
 
+<script>
+function $_(id) {
+        return document.getElementById(id);
+    }
+	var base64Data='';
+    function gen_base64() {
+        $_('base64_output').value = '';
+        $_('img_size').innerHTML = '';
+        var file = $_('upload_file').files[0];
+        if(!/image\/\w+/.test(file.type)){
+            alert("请确保文件为图像类型");
+			$_('upload_file').disabled = false;
+            return false;
+        }
+        r = new FileReader();  //本地预览
+        r.onload = function(){
+			base64Data  = r.result;
+			var optp = document.getElementById("optp");
+				var tmpData = base64Data;
+				if(optp.checked){
+					tmpData = "background-image: url(\"" + tmpData + "\");";
+				}
+				$_('base64_output').value = tmpData;
+				 $_('upload_file').disabled = false;
+			test_base64();
+            $_('img_size').innerHTML = "    图片大小：" + Math.round(r.result.length/1024*1000)/1000 + " KB";
+        }
+        r.readAsDataURL(file);    //Base64
+    }
+    function test_base64() {
+		$_('xzdtp').innerHTML = '你选择的图片：';
+        $_('img_prev').src = '';
+        $_('img_prev').src = base64Data;
+    }
+    window.onload = function() {
+        if ( typeof(FileReader) === 'undefined' ){
+            alert("抱歉，你的浏览器不支持 FileReader，请使用谷歌或火狐浏览器操作！");
+            $_('upload_file').disabled = true;
+        }
+    }
+	function copyCode(tid)
+	{
+		var Url2=document.getElementById(tid);
+			Url2.select(); // 选择对象
+			document.execCommand("Copy"); // 执行浏览器复制命令
+			alert("已复制好，可贴粘。");
+	}
+</script>
+
+<body>
+    <div class="body_1000">
+        <div class="left_leirong">
+            <div class="frame">
+                <h1>base64 转图片</h1>
+	            <div class="item">
+	                <div id="xxjs" class="form xxjs" style="display:">
+                        <div class='row'>
+                            <div class='span two xs-three strong'>
+                                <a href="javascript:;" class="input-file">
+                                    <input type="file" name="upimage" id="upload_file">&nbsp;
+                                </a>
+                                <label><input type="checkbox" onclick="checkclike()" value="cssadd" name="optp" id="optp"> 包含CSS</label>
+                                <input style="width: 10%;height: 30px;" onclick="copyCode('base64_output');" type="button" value="复制" name="codecopy" class="search-submit">
+                                <input style="width: 10%;height: 30px;" onclick="removeTextarea('base64_output');" type="button" value="清空" name="coderemo" class="search-submit">
+                            </div>
+                            <div class='span five xs-three' id="update_file_label"></div>
+
+                            <script type="text/javascript">
+                                document.getElementById("upload_file").onchange = function () {
+                                    document.getElementById("update_file_label").innerHTML = this.value;
+                                    $_('upload_file').disabled = true;
+                                    gen_base64();
+                                };
+
+                                function removeTextarea(id){
+                                    document.getElementById(id).value = '';
+                                }
+                                function checkclike(){
+                                    var optp = document.getElementById("optp");
+                                    var tmpData = base64Data;
+                                    var base64output = document.getElementById("base64_output");
+                                    if(optp.checked){
+                                        if(base64output.value != ''){
+                                            tmpData = "background-image: url(\"" + tmpData + "\");";
+                                        }
+                                    }
+                                    base64output.value = tmpData;
+                                }
+                            </script>
+                            <div class='row' style="margin-top:10px;">
+                                <textarea id="base64_output" cols="80" rows="10" style="width:99%;height:200px;"></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class='span four xs-six'>
+                                    <div class="strong red" id="img_size"></div>
+                                </div>
+                                <span id="xzdtp"></span>
+                                <div class="row alert success">
+                                    <img id="img_prev" src="" style="max-width:100%;border: 1px solid gray;" />
+                                </div>
+                            </div>
+                            <div class="strong red" id="img_size"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -16,7 +16,7 @@
                 function(data, status, xhr) {
                     //网页返回正常且删除操作成功
                     if (status == 'success' && data == 'success') {
-                        alert('操作成功');
+{#                        alert('操作成功');#}  //弹出删除成功的对话框，注释后，删除成功时没有提示消息
                         $('#modal_form').modal('hide');  //关闭对话框
 {#                        $('.modal-body').text('操作成功');#}
 {#                        $('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>');#}

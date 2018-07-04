@@ -451,7 +451,7 @@
 					</li>
 
                     <!--如果相关路径在请求路径中，那么一下li class为active open -->
-                    {% if '/lists/' in request.path or '/add/' in request.path or '/edit/' in request.path or '/task_list/' in request.path %}
+                    {% if '/lists/' in request.path or '/add/' in request.path or '/edit/' in request.path or '/task_list/' in request.path or '/user_list/' in request.path %}
                        <li class="active open" >
                     {% else %}
                         <li class="">
@@ -512,6 +512,18 @@
                                 </a>
                                 <b class="arrow"></b>
                             </li>
+
+                            {% if '/user_list/' in request.path %}
+                                <li class="active" >
+                            {% else %}
+                                <li class="">
+                            {% endif %}
+                                <a href="{% url 'user_list'%}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									用户
+								</a>
+								<b class="arrow"></b>
+							</li>
 
 						</ul>
 					</li>

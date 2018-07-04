@@ -4,7 +4,7 @@ __author__ = 'igis_gzy'
 
 import urllib, urllib2, base64
 def ocr():  #百度OCR文字识别
-    access_token = "xxx"
+    access_token = "24.32402e8a9da4394ab059726faeec2f60.2592000.1521953175.282335-10825062"
     # url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
     url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
     # 二进制方式打开图文件

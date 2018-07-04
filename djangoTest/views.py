@@ -1,9 +1,5 @@
 #coding=utf8
+from django.shortcuts import render
 
-__author__ = 'igis_gzy'
-
-from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse(u"欢迎")
+# Create your views here.
 

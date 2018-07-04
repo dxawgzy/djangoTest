@@ -17,7 +17,7 @@ def random_str(randomlength=10):  #用于生成指定长度随机字符串
 def tencent_chat():  #腾讯AI-智能闲聊
     str = raw_input("Enter your input: ")
     url = "https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat"
-    app_key = "xxx"
+    app_key = "8RiXkm6qaiKP1pTc"
     params = {
         'app_id': '1106664443',
         'time_stamp': int(time.time()),  #获取当前时间戳，保留整数
@@ -46,7 +46,7 @@ def tencent_card():  #腾讯AI-身份证识别
     f = open(src, 'rb')
     img = base64.b64encode(f.read())  # 图像base64编码
     url = "https://api.ai.qq.com/fcgi-bin/ocr/ocr_idcardocr"
-    app_key = "xxx"
+    app_key = "8RiXkm6qaiKP1pTc"
     params = {
         'app_id': '1106664443',
         'time_stamp': int(time.time()),  #获取当前时间戳，保留整数

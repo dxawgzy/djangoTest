@@ -41,71 +41,55 @@
         <!-- Search Page BEGINS-->
         <div class="col-xs-12">
             <form class="navbar-for navbar-container" role="search" method="get" action="">{% csrf_token %}
-              <div class="col-sm-3">
-                  <div class="input-group">
-                      <span class="input-group-addon" id="task_code" >任务流水</span>
-                      <input type="text" class="form-control" placeholder="" aria-describedby="task_code" name="task_code"
-                             {% if request.GET.task_code %}value = {{ request.GET.task_code }}{% endif %}>
-                  </div>
-              </div>
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="task_code" >任务流水</span>
+                        <input type="text" class="form-control" placeholder="" aria-describedby="task_code" name="task_code"
+                            {% if request.GET.task_code %}value = {{ request.GET.task_code }}{% endif %}>
+                    </div>
+                </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="task_title">任务名称</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="task_title" name = "task_title"
-                               {% if request.GET.task_title %}value = {{ request.GET.task_title }}{% endif %}>
+                            {% if request.GET.task_title %}value = {{ request.GET.task_title }}{% endif %}>
                     </div>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="task_signer">创建人员</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="task_signer" name = "task_signer"
-                               {% if request.GET.task_signer %}value = {{ request.GET.task_signer }}{% endif %}>
+                            {% if request.GET.task_signer %}value = {{ request.GET.task_signer }}{% endif %}>
                     </div>
                 </div>
 
-{#                <div class="col-sm-3">#}
-{#                    <div class="input-group">#}
-{#                        <span class="input-group-addon" id="task_contacts">联系人员</span>#}
-{#                        <input type="text" class="form-control" placeholder="" aria-describedby="task_contacts" name = "task_contacts"#}
-{#                               {% if request.GET.task_contacts %}value = {{ request.GET.task_contacts }}{% endif %}>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-sm-3">#}
-{#                    <div class="input-group">#}
-{#                        <span class="input-group-addon" id="process_content">任务内容</span>#}
-{#                        <input type="text" class="form-control" placeholder="" aria-describedby="process_content" name = "process_content"#}
-{#                               {% if request.GET.process_content %}value = {{ request.GET.process_content }}{% endif %}>#}
-{#                    </div>#}
-{#                </div>#}
-
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="task_category">任务分类</span>
                         <select class="form-control" name="task_category">
                             <option value="">所有类型</option>
-                            <option value="综合事务" {% if request.GET.task_category and request.GET.task_category == '综合事务'%} selected{% endif %}>综合事务</option>
-                            <option value="机构建设" {% if request.GET.task_category and request.GET.task_category == '机构建设'%} selected{% endif %}>机构建设</option>
-                            <option value="线路事务" {% if request.GET.task_category and request.GET.task_category == '线路事务'%} selected{% endif %}>线路事务</option>
+                            <option value="综合事务" {% if request.GET.task_category and request.GET.task_category == '综合事务' %} selected{% endif %}>综合事务</option>
+                            <option value="机构建设" {% if request.GET.task_category and request.GET.task_category == '机构建设' %} selected{% endif %}>机构建设</option>
+                            <option value="线路事务" {% if request.GET.task_category and request.GET.task_category == '线路事务' %} selected{% endif %}>线路事务</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="input-group">
                         <span class="input-group-addon" id="task_status">任务状态</span>
                         <select class="form-control" name="task_status">
                             <option value="">全部</option>
-                            <option value="处理中" {% if request.GET.task_status and request.GET.task_status == '处理中'%} selected{% endif %}>处理中</option>
-                            <option value="已结单" {% if request.GET.task_status and request.GET.task_status == '已结单'%} selected{% endif %}>已结单</option>
+                            <option value="处理中" {% if request.GET.task_status and request.GET.task_status == '处理中' %} selected{% endif %}>处理中</option>
+                            <option value="已结单" {% if request.GET.task_status and request.GET.task_status == '已结单' %} selected{% endif %}>已结单</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- /section:plugins/date-time.datepicker -->
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="input-daterange input-group">
                         <span class="input-group-addon" id="date-picker">创建日期</span>
 {#                        <input id="f_start_date" name="task_start" class="form-control date-picker" readonly="false" {% if request.GET.task_start %} value = {{ request.GET.task_start }}{% endif %}>#}
@@ -124,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-0">
+                <div class="col-sm-2">
                   <span class="input-group-btn">
                       <button type="submit" class="btn btn-purple btn-sm">
                           查询
@@ -172,7 +156,7 @@
 {#                                {% if item.task_status == '处理中' %}<td>处理中</td>{% endif %}#}
 {#                                {% if item.task_status == '已结单' %}<td>已结单</td>{% endif %}#}
                                 <td>{{ item.task_signer }}</td>
-                                <td>{{ item.task_signtime }}</td>
+                                <td>{{ item.task_signtime|date:"Y-m-d" }}</td>
                                 <td>
                                     <!--页面扩展时的按钮布局-->
 {#                                    <div class="hidden-sm hidden-xs action-buttons">#}
@@ -191,46 +175,16 @@
                                         </a>
 {#                                        </button>#}
                                         <ul class="dropdown-menu dropdown-only-icon">
+                                            {% if item.task_status != '已结单' %}
+                                                <li>
+                                                  <a href="{% url 'task_edit' item.id %}">编辑任务</a>
+                                                </li>
+                                            {% endif %}
                                             <li>
-                                              <a href="{% url 'task_edit' item.id %}">编辑任务</a>
-                                            </li>
-                                            <li>
-                                                <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务{{ item.task_title }}吗？">删除任务</a>
+                                                <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务 {{ item.task_title }} 吗？">删除任务</a>
                                             </li>
                                         </ul>
                                     </div><!-- /.btn-group -->
-
-                                    <!--页面收缩时的按钮布局-->
-                                    <div class="hidden-md hidden-lg">
-                                        <div class="inline position-relative">
-                                            <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                <li>
-                                                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                        <span class="blue">
-                                                            <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                        <span class="green">
-                                                            <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                        <span class="red">
-                                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

@@ -1,23 +1,21 @@
 # -*- coding: UTF-8 -*-
-import json
+import json, time, hashlib, urllib, urllib2, base64, requests
 from django.contrib.auth import views, authenticate, login as auth_login, update_session_auth_hash
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-import time, urllib, hashlib
 from echo.models import Node, Line, Device, Task, Process, Upload, EmailVerifyRecord
 from echo.upload import handle_uploaded_file, pic_base64
 from echo.forms import NodeForm, LineForm, DeviceForm, TaskForm, ProcessForm, UploadFileForm, LoginForm, CaptchaForm, RegisterForm
+from django.views.generic import View
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.cache import cache_page
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
-from django.views.generic import View
-from django.contrib.auth.models import User
 from email_send import send_register_email
-from django.contrib.auth.hashers import make_password, check_password
-import requests
 
 # Create your views here.
 
@@ -490,9 +488,6 @@ def task_finish(request, pk):  #结束任务功能
             data = 'error'  #返回JSON值，error
         return HttpResponse(json.dumps(data), content_type = "application/json")  #通过json形式返回相关数值
 
-def jscal2(request):
-    return render_to_response('daohanglan.html')
-
 class RegisterView(View):   #用户注册
     def get(self, request):
         register_form = RegisterForm()
@@ -500,28 +495,32 @@ class RegisterView(View):   #用户注册
             csn = CaptchaStore.generate_key()
             cimageurl = captcha_image_url(csn)
             return HttpResponse(cimageurl)
-        return render(request, "register_echo.html", {'register_form':register_form})
+        return render(request, 'register_echo.html', {'register_form':register_form})
     def post(self, request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             user_name = request.POST.get("username", "")
             email = request.POST.get("email", "")
-            pass_word = request.POST.get("password", "")
+            password1 = request.POST.get("password", "")
+            password2 = request.POST.get("repeat_password", "")
             is_user_exist = User.objects.filter(username=user_name)  #判断用户是否已经存在
             if is_user_exist:
-                return render(request, "register_echo.html", {"register_form": register_form, 'msg': u'用户名已存在'})
+                return render(request, 'register_echo.html', {'register_form': register_form, 'msg': u'用户名已存在'})
+            if password2 != password1:
+                return render(request, 'register_echo.html', {'register_form': register_form, 'msg': u'密码不一致'})
             user_profile = User()  #实例化用户，然后赋值
             user_profile.username = user_name
             user_profile.email = email
             user_profile.is_active = False  #新建用户为非活跃用户，可通过验证变为活跃用户
-            user_profile.password = make_password(pass_word)  #将密码明文转换为密文
+            user_profile.password = make_password(password1)  #将密码明文转换为密文
             user_profile.save()  # 保存到数据库
             send_register_email(email, user_name, "register")  #此处加入了邮箱验证的手段
-            form = CaptchaForm()
-            return render(request, 'login.html', {'username': user_name, 'form': form})
+            # form = CaptchaForm()
+            # return render(request, 'login.html', {'username': user_name, 'form': form})
+            return render(request, 'registered_success.html')
         else:
             # form表单验证失败，将错误信息传给前端
-            return render(request, "register_echo.html", {"register_form": register_form, 'msg': u'注册失败'})
+            return render(request, 'register_echo.html', {'register_form': register_form, 'msg': u'注册失败'})
 
 class ActiveUserView(View):  #注册的用户通过邮件激活
     def get(self, request, active_code):
@@ -533,8 +532,8 @@ class ActiveUserView(View):  #注册的用户通过邮件激活
                 user.is_active = True  #激活用户
                 user.save()
         else:
-            return render(request, "active_fail.html")
-        return render(request, "active_success.html")
+            return render(request, 'active_fail.html')
+        return render(request, 'active_success.html')
 
 def ajax_val(request):  #动态验证验证码（焦点离开验证码输入框时验证）
     if request.is_ajax():
@@ -562,9 +561,8 @@ def map(request):  #百度地图
     return render(request, 'baidu_map.html', context)
 
 
-import urllib, urllib2, base64
 def ocr(request):  #百度OCR文字识别
-    access_token = "xxx"
+    access_token = "24.32402e8a9da4394ab059726faeec2f60.2592000.1521953175.282335-10825062"
     url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
     # url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
     # params = {
@@ -614,7 +612,7 @@ def random_str(randomlength=10):
 
 def tencent(request):  #腾讯AI
     url = "https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat"
-    app_key = "xxx"
+    app_key = "8RiXkm6qaiKP1pTc"
     if request.method == 'POST':
         params = {
             'app_id': '1106664443',
@@ -644,7 +642,7 @@ def tencent(request):  #腾讯AI
     return render(request, 'tencent_ai.html', context)
 
 def faq(request):  #图灵机器人
-    tuling_key = "xxx"
+    tuling_key = "5b50e5980c24483088a1129f18abec58"
     url = "http://www.tuling123.com/openapi/api"
     if request.method == 'POST':
         msg =  request.POST.get('message')
@@ -677,4 +675,56 @@ def faq(request):  #图灵机器人
     }
     return render(request, 'faq.html', context)
 
+@login_required
+def user_list(request):
+    if request.method == 'GET':  #如果通过GET来获取了相应参数，那么进行查询
+        kwargs = {}  # 建立过滤条件的键值对
+        query = ''  # 用于分页显示的query
+        for key, value in request.GET.iteritems():
+            if key != 'csrfmiddlewaretoken' and key != 'page':  #除去token及page的参数
+                kwargs[key + '__contains'] = value
+                query += '&' + key + '=' + value  #建立用于分页的query
+        data = User.objects.filter(**kwargs).order_by('username')
+    else:
+        data = User.objects.all().order_by('username')
+    context = {
+        'data': data,
+        'query': query,
+        'sub_title': '用户列表',
+        'head_title': '用户列表'
+    }
+    return render(request, 'user_list.html', context)  #跳转到相应页面，并将值传递过去
+
+@login_required
+def user_profile(request, pk):
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的task实例
+    if request.method == 'GET':  #如果通过GET来获取了相应参数，那么进行查询
+        kwargs = {}  # 建立过滤条件的键值对
+        query = ''  # 用于分页显示的query
+        for key, value in request.GET.iteritems():
+            if key != 'csrfmiddlewaretoken' and key != 'page':  #除去token及page的参数
+                kwargs[key + '__contains'] = value
+                query += '&' + key + '=' + value  #建立用于分页的query
+        # data = User.objects.filter(**kwargs).order_by('username')
+    # else:
+        # data = User.objects.all().order_by('username')
+    context = {
+        'user': user_ins,
+        # 'query': query,
+        'sub_title': '用户详情',
+        'head_title': '用户详情'
+    }
+    return render(request, 'user_profile.html', context)  #跳转到相应页面，并将值传递过去
+
+@login_required
+def user_delete(request, pk):  #任务列表的任务删除
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的task实例
+    if request.method == 'POST':
+        try:
+            user_ins.delete()
+            data = 'success'  #删除成功,则data信息为success
+        except IntegrityError:
+            data = 'error'  #如因外键问题，或其他问题，删除失败，则报error
+        #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
+        return JsonResponse(data, safe=False)
 

@@ -1,0 +1,155 @@
+{%  extends "index.html" %}
+
+{% block page_css %}
+{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'user_list' %}">用户</a>
+{% endblock %}
+
+{% block container %}
+    {% load staticfiles %}
+
+    <div class="row">
+        <!-- Search Page BEGINS-->
+        <div class="col-xs-12">
+            <form class="navbar-for navbar-container" role="search" method="get" action="">{% csrf_token %}
+                <div class="col-sm-2">
+                  <div class="input-group">
+                      <span class="input-group-addon" id="task_code" >用户名</span>
+                      <input type="text" class="form-control" style="width:120px;" placeholder="" aria-describedby="username" name="username"
+                             {% if request.GET.username %}value = {{ request.GET.username }}{% endif %}>
+                  </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="is_superuser">是否管理员</span>
+                        <select class="form-control" name="is_superuser">
+                            <option value="">全部</option>
+                            <option value="True" {% if request.GET.is_superuser and request.GET.is_superuser == 'True' %} selected{% endif %}>是</option>
+                            <option value="False" {% if request.GET.is_superuser and request.GET.is_superuser == 'False' %} selected{% endif %}>否</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="is_active">是否激活</span>
+                        <select class="form-control" name="is_active">
+                            <option value="">全部</option>
+                            <option value="True" {% if request.GET.is_active and request.GET.is_active == 'True' %} selected{% endif %}>是</option>
+                            <option value="False" {% if request.GET.is_active and request.GET.is_active == 'False' %} selected{% endif %}>否</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                  <span class="input-group-btn">
+                      <button type="submit" class="btn btn-purple btn-sm">
+                          查询
+                          <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                      </button>
+                  </span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Page END -->
+
+        <!-- PAGE TABLES BEGINS -->
+
+        <div class="col-xs-12">
+            <a href="{% url 'task_add'%}"><input class='btn btn-primary' type='button' value='创建用户' /></a>
+            <div class="table-header">
+                {{ result }}
+            </div>
+
+            <div>
+                <table id="table_id" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>是否管理员</th>
+                        <th>是否激活</th>
+                        <th>上次登录</th>
+                        <th>操作</th>
+                    </thead>
+                    <tbody>
+                        {% for item in data %}
+                            <tr>
+                                <td><a href="{% url 'user_profile' item.id %}">{{ item.username }}</a></td>
+                                <td>{{ item.email }}</td>
+                                <td>{{ item.is_superuser }}</td>
+                                <td>{{ item.is_active }}</td>
+{#                                {% load tz %}#}
+{#                                <td> {% timezone "Asia/Shanghai" %} {{ item.last_login|date:"Y-m-d H:i:s" }} {% endtimezone %}</td>#}
+                                <td>{{ item.last_login|date:"Y-m-d H:i:s" }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                            <i class="ace-icon fa fa-cog blue bigger-130"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-only-icon">
+{#                                            <li>#}
+{#                                              <a href="{% url 'task_edit' item.id %}">编辑用户</a>#}
+{#                                            </li>#}
+                                            <li>
+                                                <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'user_delete' item.id %}" content="确认删除用户 {{ item.username }} 吗？">删除用户</a>
+                                            </li>
+                                        </ul>
+                                    </div><!-- /.btn-group -->
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% include 'modal.html' %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block page_javascript %}
+    {% include 'modal_js.html' %}
+    <link rel="stylesheet" href="{%static 'external/dataTables/dataTables.bootstrap.min.css'%}">
+    <script src="{%static 'external/dataTables/jquery.dataTables.min.js'%}"></script>
+    <script src="{%static 'external/dataTables/dataTables.bootstrap.min.js'%}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#table_id').DataTable({
+                //分页配置
+{#                "paging": false,#}
+                //搜索配置
+{#                "searching": false,#}
+                //页脚信息
+{#                "bInfo": false,#}
+                //列配置
+                "columnDefs": [{
+                    // -1 表示只有最后一列不参与排序，[0,2]表示第1和第3列不参与排序
+                    "orderable": false, "targets": -1
+                }],
+                "sPaginationType": "full_numbers",
+                "aLengthMenu": [[3, 5, 10, -1], [3, 5, 10, "所有"]],
+                "iDisplayLength": 5,  //每页默认显示条数
+                "oLanguage": {
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sInfo": "共 _TOTAL_ 条记录，第 _START_ 至 _END_ 条",
+{#                    "sInfoFiltered": "(从 _MAX_ 条记录中检索)",#}
+                    "sInfoFiltered": "",  //启用了搜素功能后会显示上一条文字，此处强制让其不显示
+                    "sZeroRecords": "抱歉， 没有找到",
+                    "sInfoEmpty": "没有数据",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "前一页",
+                        "sNext": "后一页",
+                        "sLast": "尾页"
+                    }
+                },
+            "sDom": '<"top"f<"clear">>rt<"bottom"lip<"clear">>'
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -16,9 +16,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from djangoTest import views as first_views   #new
 from calc import views as calc_views
-from learn import views as learn_views
 from blog import views as blog_views
 from database import views as database_views
 from database import search, search2, customer, book
@@ -26,9 +24,7 @@ from echo import views as echo_views
 from echo.views import RegisterView, ActiveUserView
 
 urlpatterns = [
-    # url(r'^$', first_views.index),   # 127.0.0.1:8000
-    # url(r'^$', learn_views.home, name='home'),
-    url(r'^$', echo_views.index, name='index'),
+    # url(r'^$', echo_views.index, name='index'),
     url(r'^ajax/$', calc_views.ajax, name='ajax'),
     url(r'^add1/$', calc_views.add1, name='add1'),  # 127.0.0.1:8000/add/?a=3&b=5
     #url(r'^add2/(\d+)/(\d+)/$', calc_views.add2, name='add2'),  # 127.0.0.1:8000/add2/3/5/
@@ -73,7 +69,6 @@ urlpatterns = [
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name="user_active"),  # 提取出active后的所有字符赋给active_code
     url(r'^upload_file/(?P<pk>\d+)/$', echo_views.upload_file, name='upload_file'),  #上传附件
     url(r'^task_finish/(?P<pk>\d+)/$', echo_views.task_finish, name='task_finish'),  #结束任务
-    url(r'^jscal2/$', echo_views.jscal2, name='jscal2'),
     url(r'^captcha/', include('captcha.urls')),  #验证码模块
     url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  #动态验证验证码
     url('^forget_passwd/', echo_views.forget_passwd, name='forget_passwd'),  #找回密码
@@ -81,11 +76,9 @@ urlpatterns = [
     url('^ocr/', echo_views.ocr, name='ocr'),  #百度OCR文字识别
     url('^tencent/', echo_views.tencent, name='tencent'),  #腾讯AI
     url('^faq/', echo_views.faq, name='faq'),  #图灵机器人
+    url(r'^user_list/', echo_views.user_list, name='user_list'),
+    url(r'^user_profile/(?P<pk>\d+)/$', echo_views.user_profile, name='user_profile'),
+    url(r'^user_delete/(?P<pk>\d+)/$', echo_views.user_delete, name='user_delete'),
 
 ]
-
-from django.conf import settings
-# if settings.DEBUG:
-#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

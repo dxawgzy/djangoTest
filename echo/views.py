@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import json, time, hashlib, urllib, urllib2, base64, requests
 from django.contrib.auth import views, authenticate, login as auth_login, update_session_auth_hash
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
@@ -74,11 +75,7 @@ def login(request):
                     else:
                         return render(request, 'login.html',
                                       {'username': login_param['username'], 'form': form,
-                                       # 'err_message': u'密码已过期'})
-                                       'err_message': u'用户未激活，请登录邮箱点击链接激活'})
-                # if user and user.is_active:
-                #     auth_login(request, user)
-                #     return HttpResponseRedirect('/index')
+                                       'err_message': u'用户未激活'})
                 else:
                     return render(request, 'login.html',
                                   {'username': login_param['username'], 'form': form,
@@ -179,7 +176,7 @@ def lists(request, table):  #显示各列表信息
     else:  #如果没有从GET提交中获取信息，那么data则为原始数据
         data = raw_data
     # data_list, page_range, count, page_nums = pagination(request, data)  #将分页的信息传递到展示页面中去
-    context = {  #建立context字典，将值传递到相应页面
+    context = {
         # 'data': data_list,
         'data': data,
         'table': table,
@@ -203,15 +200,15 @@ def add(request, table):
     if table == 'device':
         form = DeviceForm(request.POST or None)
         sub_title = '添加设备'
-    if form.is_valid():  #判断form是否有效
-        instance = form.save(commit=False)  #创建实例，需要做些数据处理，暂不做保存
-        if table == 'node':  #将登录用户作为登记人
-            instance.node_signer = request.user
+    if form.is_valid():
+        instance = form.save(commit=False)
+        if table == 'node':
+            instance.node_signer = request.user  #将登录用户作为登记人
         if table == 'line':
             instance.line_signer = request.user
         if table == 'device':
             instance.device_signer = request.user
-        instance.save()  #保存该实例
+        instance.save()
         return redirect('lists', table=table)  #跳转至列表页面,配合table参数，进行URL的反向解析
     context = {
         'form': form,
@@ -684,7 +681,7 @@ def user_list(request):
             if key != 'csrfmiddlewaretoken' and key != 'page':  #除去token及page的参数
                 kwargs[key + '__contains'] = value
                 query += '&' + key + '=' + value  #建立用于分页的query
-        data = User.objects.filter(**kwargs).order_by('username')
+        data = User.objects.filter(**kwargs)
     else:
         data = User.objects.all().order_by('username')
     context = {
@@ -693,24 +690,13 @@ def user_list(request):
         'sub_title': '用户列表',
         'head_title': '用户列表'
     }
-    return render(request, 'user_list.html', context)  #跳转到相应页面，并将值传递过去
+    return render(request, 'user_list.html', context)
 
 @login_required
 def user_profile(request, pk):
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的task实例
-    if request.method == 'GET':  #如果通过GET来获取了相应参数，那么进行查询
-        kwargs = {}  # 建立过滤条件的键值对
-        query = ''  # 用于分页显示的query
-        for key, value in request.GET.iteritems():
-            if key != 'csrfmiddlewaretoken' and key != 'page':  #除去token及page的参数
-                kwargs[key + '__contains'] = value
-                query += '&' + key + '=' + value  #建立用于分页的query
-        # data = User.objects.filter(**kwargs).order_by('username')
-    # else:
-        # data = User.objects.all().order_by('username')
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
     context = {
         'user': user_ins,
-        # 'query': query,
         'sub_title': '用户详情',
         'head_title': '用户详情'
     }
@@ -718,7 +704,12 @@ def user_profile(request, pk):
 
 @login_required
 def user_delete(request, pk):  #任务列表的任务删除
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的task实例
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+    try:
+        record = EmailVerifyRecord.objects.get(username=user_ins.username)
+        record.delete()  #同步删除注册时的激活链接数据
+    except ObjectDoesNotExist:  # 如果没有链接数据，不做处理
+        pass
     if request.method == 'POST':
         try:
             user_ins.delete()
@@ -728,3 +719,28 @@ def user_delete(request, pk):  #任务列表的任务删除
         #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
         return JsonResponse(data, safe=False)
 
+@login_required
+def user_forbidden(request, pk):  #用户下拉菜单——冻结用户
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+    if request.method == 'POST':
+        try:
+            user_ins.is_active = False  #冻结用户
+            user_ins.save()
+            data = 'success'  #成功,则data信息为success
+        except IntegrityError:
+            data = 'error'  #如因外键问题，或其他问题失败，则报error
+        #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
+        return JsonResponse(data, safe=False)
+
+@login_required
+def user_active(request, pk):  #用户下拉菜单——激活用户
+    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+    if request.method == 'POST':
+        try:
+            user_ins.is_active = True  #激活用户
+            user_ins.save()
+            data = 'success'  #成功,则data信息为success
+        except IntegrityError:
+            data = 'error'  #如因外键问题，或其他问题失败，则报error
+        #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
+        return JsonResponse(data, safe=False)

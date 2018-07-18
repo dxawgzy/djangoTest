@@ -24,7 +24,7 @@ from echo import views as echo_views
 from echo.views import RegisterView, ActiveUserView
 
 urlpatterns = [
-    # url(r'^$', echo_views.index, name='index'),
+    url(r'^admin/', admin.site.urls),
     url(r'^ajax/$', calc_views.ajax, name='ajax'),
     url(r'^add1/$', calc_views.add1, name='add1'),  # 127.0.0.1:8000/add/?a=3&b=5
     #url(r'^add2/(\d+)/(\d+)/$', calc_views.add2, name='add2'),  # 127.0.0.1:8000/add2/3/5/
@@ -47,13 +47,11 @@ urlpatterns = [
     url(r'^delete_book/$', book.delete),
     url(r'^shopcart/$', book.shopcart),
     url(r'^order_submit/$', book.order_submit),
-    url(r'^admin/', admin.site.urls),
 
+    url(r'^$', echo_views.index, name='index'),
+    url(r'^index/', echo_views.index, name='index'),
     url(r'^lists/(?P<table>\w+)/$', echo_views.lists, name='lists'),
     url(r'^add/(?P<table>\w+)/$', echo_views.add, name='add'),
-    # url(r'^articles/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', echo_views.month_archive),
-    # url(r'^articles/([0-9]{4})/$', echo_views.year_archive, name='news-year-archive'),
-    url(r'^index/', echo_views.index, name='index'),
     url(r'^edit/(?P<table>\w+)/(?P<pk>\d+)/$', echo_views.edit, name='edit'),
     url(r'^delete/(?P<table>\w+)/(?P<pk>\d+)/$', echo_views.delete, name='delete'),
     url(r'^task_list/', echo_views.task_list, name='task_list'),
@@ -79,6 +77,7 @@ urlpatterns = [
     url(r'^user_list/', echo_views.user_list, name='user_list'),
     url(r'^user_profile/(?P<pk>\d+)/$', echo_views.user_profile, name='user_profile'),
     url(r'^user_delete/(?P<pk>\d+)/$', echo_views.user_delete, name='user_delete'),
+    url(r'^user_forbidden/(?P<pk>\d+)/$', echo_views.user_forbidden, name='user_forbidden'),
+    url(r'^user_active/(?P<pk>\d+)/$', echo_views.user_active, name='user_active'),
 
 ]
-

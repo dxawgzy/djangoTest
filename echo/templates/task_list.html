@@ -138,12 +138,6 @@
                         <th>任务状态</th>
                         <th>创建人</th>
                         <th>创建时间</th>
-{#                        <th>#}
-{#                            <a class="blue" href="{% url 'task_add'%}">#}
-{#                                <i class="ace-icon fa fa-search-plus bigger-130"></i>#}
-{#                                新建任务#}
-{#                            </a>#}
-{#                        </th>#}
                         <th>操作</th>
                     </thead>
                     <tbody>
@@ -152,22 +146,17 @@
                                 <td>{{ item.task_code }}</td>
                                 <td>{{ item.task_title }}</td>
                                 <td>{{ item.task_category }}</td>
-                                <td>{{ item.task_status }}</td>
-{#                                {% if item.task_status == '处理中' %}<td>处理中</td>{% endif %}#}
-{#                                {% if item.task_status == '已结单' %}<td>已结单</td>{% endif %}#}
+{#                                <td>{{ item.task_status }}</td>#}
+                                <td>
+                                    {% if item.task_status != '已结单' %}
+                                        <span class="label label-sm label-warning">{{ item.task_status }}</span>
+                                    {% else %}
+                                        <span class="label label-sm label-success">{{ item.task_status }}</span>
+                                    {% endif %}
+                                </td>
                                 <td>{{ item.task_signer }}</td>
                                 <td>{{ item.task_signtime|date:"Y-m-d" }}</td>
                                 <td>
-                                    <!--页面扩展时的按钮布局-->
-{#                                    <div class="hidden-sm hidden-xs action-buttons">#}
-{#                                        <a class="green" href="{% url 'task_edit' item.id %}" title="编辑任务">#}
-{#                                            <i class="ace-icon fa fa-pencil bigger-130"></i>#}
-{#                                        </a>#}
-{##}
-{#                                        <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'task_delete' item.id %}" content="确认删除任务{{ item.task_title }}吗？" title="删除任务" >#}
-{#                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
                                     <div class="btn-group">
 {#                                        <button data-toggle="dropdown" class="btn btn-minier dropdown-toggle">#}
                                         <a href="#" data-toggle="dropdown" class="dropdown-toggle">
@@ -225,11 +214,6 @@
     <link rel="stylesheet" href="{%static 'external/datePicker/jquery-ui.css'%}">
 {#    <script src="{%static 'external/datePicker/jquery-1.12.4.js'%}"></script>#}
     <script src="{%static 'external/datePicker/jquery-ui.js'%}"></script>
-
-{#  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">#}
-{#  <script src="//code.jquery.com/jquery-1.9.1.js"></script>#}
-{#  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>#}
-
     <script type="text/javascript">
         $(function() {
             $( "#datepicker1" ).datepicker({
@@ -249,50 +233,6 @@
             });
         });
     </script>
-
-        <!--用于日期的前端显示-->
-{#     <script type="text/javascript">#}
-{#         jQuery(function($) {#}
-{#            //datepicker plugin#}
-{#            //link#}
-{#            $('.date-picker').datepicker({#}
-{#                autoclose: true,#}
-{#                todayHighlight: true#}
-{#            })#}
-{#            //show datepicker when clicking on the icon#}
-{#            .next().on(ace.click_event, function(){#}
-{#               $(this).prev().focus();#}
-{#            });#}
-{##}
-{#            //or change it into a date range picker#}
-{#            $('.input-daterange').datepicker({autoclose:true});#}
-{##}
-{#            //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization#}
-{#            $('input[name=date-range-picker]').daterangepicker({#}
-{#               'applyClass' : 'btn-sm btn-success',#}
-{#               'cancelClass' : 'btn-sm btn-default',#}
-{#               locale: {#}
-{#                  applyLabel: 'Apply',#}
-{#                  cancelLabel: 'Cancel'#}
-{#               }#}
-{#            })#}
-{#            .prev().on(ace.click_event, function(){#}
-{#               $(this).next().focus();#}
-{#            });#}
-{##}
-{#            $('#timepicker1').timepicker({#}
-{#               minuteStep: 1,#}
-{#               showSeconds: true,#}
-{#               showMeridian: false#}
-{#            }).next().on(ace.click_event, function(){#}
-{#               $(this).prev().focus();#}
-{#            });#}
-{##}
-{#            $('#date-timepicker1').datetimepicker().next().on(ace.click_event, function(){#}
-{#               $(this).prev().focus();#}
-{#            });#}
-{#         });#}
-{#     </script>#}
 
     <!--datatable的专用js-->
 {#    <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">#}
@@ -341,5 +281,3 @@
     </script>
 
 {% endblock %}
-
-

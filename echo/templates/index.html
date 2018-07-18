@@ -4,11 +4,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-{#		<title>Echo Project</title>#}
-        <title>{{ head_title }}</title>
-
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>{{ head_title }}</title>
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="{%static 'assets/css/bootstrap.css'%}" />
@@ -48,6 +46,11 @@
         <link rel="stylesheet" type="text/css" href="{%static 'assets/jscal2/css/steel/steel.css'%}" />
         <script type="text/javascript" src="{%static 'assets/jscal2/js/jscal2.js'%}"></script>
         <script type="text/javascript" src="{%static 'assets/jscal2/js/lang/en.js'%}"></script>
+
+		<!-- 弹出消息提示框 toastr插件 -->
+        <link rel="stylesheet" href="{%static 'external/toastr/toastr.css'%}" />
+        <script src='{%static 'assets/js/jquery.js'%}'></script>"
+        <script src="{%static 'external/toastr/toastr.min.js'%}"></script>
 
         {% block page_css %}
         {% endblock %}
@@ -350,8 +353,6 @@
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 {#								<img class="nav-user-photo" src="{%static 'assets/avatars/user.jpg'%}" alt="Jason's Photo" />#}
 								<span class="user-info">
-{#									<small>Welcome,</small>#}
-{#									Jason#}
                                    <!--判断用户是否已经通过认证，如果通过则显示用户已登陆-->
                                    {% if user.is_authenticated %}
                                        欢迎您， {{ user.username }}
@@ -359,7 +360,6 @@
                                        用户选项
                                    {% endif %}
 								</span>
-{#								<i class="ace-icon fa fa-caret-down"></i>#}
 							</a>
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
@@ -390,11 +390,9 @@
 
 							</ul>
 						</li>
-
 						<!-- /section:basics/navbar.user_menu -->
 					</ul>
 				</div>
-
 				<!-- /section:basics/navbar.dropdown -->
 			</div><!-- /.navbar-container -->
 		</div>
@@ -520,7 +518,7 @@
                             {% endif %}
                                 <a href="{% url 'user_list'%}">
 									<i class="menu-icon fa fa-caret-right"></i>
-									用户
+									用户信息
 								</a>
 								<b class="arrow"></b>
 							</li>
@@ -528,97 +526,16 @@
 						</ul>
 					</li>
 
-{#					<li class="">#}
-{#						<a href="#" class="dropdown-toggle">#}
-{#							<i class="menu-icon fa fa-pencil-square-o"></i>#}
-{#							<span class="menu-text"> 测试页面 </span>#}
-{##}
-{#							<b class="arrow fa fa-angle-down"></b>#}
-{#						</a>#}
-{##}
-{#						<b class="arrow"></b>#}
-{##}
-{#						<ul class="submenu">#}
-{#							<li class="">#}
-{#                                <a href="{% url 'testpage1'%}">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									测试页面1#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="form-elements-2.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Form Elements 2#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="form-wizard.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Wizard &amp; Validation#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="wysiwyg.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Wysiwyg &amp; Markdown#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="dropzone.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Dropzone File Upload#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{#						</ul>#}
-{#					</li>#}
-{##}
-{#					<li class="">#}
-{#						<a href="calendar.html">#}
-{#							<i class="menu-icon fa fa-calendar"></i>#}
-{##}
-{#							<span class="menu-text">#}
-{#								Calendar#}
-{##}
-{#								<!-- #section:basics/sidebar.layout.badge -->#}
-{#								<span class="badge badge-transparent tooltip-error" title="2 Important Events">#}
-{#									<i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>#}
-{#								</span>#}
-{##}
-{#								<!-- /section:basics/sidebar.layout.badge -->#}
-{#							</span>#}
-{#						</a>#}
-{##}
-{#						<b class="arrow"></b>#}
-{#					</li>#}
-
                     <!--如果相关路径在请求路径中，那么一下li class为active open -->
                     {% if '/map/' in request.path or '/ocr/' in request.path or '/tencent/' in request.path  or '/faq/' in request.path or '/grafana/' in request.path %}
                        <li class="active open" >
                     {% else %}
                         <li class="">
                     {% endif %}
-{#					<li class="active open">#}
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-file-o"></i>
 							<span class="menu-text">
 								其他信息
-								<!-- #section:basics/sidebar.layout.badge -->
-{#								<span class="badge badge-primary">5</span>#}
-								<!-- /section:basics/sidebar.layout.badge -->
 							</span>
 							<b class="arrow fa fa-angle-down"></b>
 						</a>
@@ -684,42 +601,6 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
-
-{#							<li class="">#}
-{#								<a href="error-404.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Error 404#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="error-500.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Error 500#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="">#}
-{#								<a href="grid.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Grid#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
-{##}
-{#							<li class="active">#}
-{#								<a href="index.html">#}
-{#									<i class="menu-icon fa fa-caret-right"></i>#}
-{#									Blank Page#}
-{#								</a>#}
-{##}
-{#								<b class="arrow"></b>#}
-{#							</li>#}
 						</ul>
 					</li>
 				</ul><!-- /.nav-list -->
@@ -747,7 +628,6 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-{#								<a href="#">Home</a>#}
                                 <a href="{% url 'index' %}">主页</a>
 							</li>
 
@@ -757,7 +637,6 @@
                                 {% block page_title %}
                                 {% endblock %}
 							</li>
-{#							<li class="active">Blank Page</li>#}
                             <li class="active">{{ sub_title }}</li>
 						</ul><!-- /.breadcrumb -->
 
@@ -978,7 +857,6 @@
 		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
 		<link rel="stylesheet" href="{%static 'assets/css/ace.onpage-help.css'%}" />
 		<link rel="stylesheet" href="{%static 'docs/assets/js/themes/sunburst.css'%}" />
-
 		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
 		<script src="{%static 'assets/js/ace/elements.onpage-help.js'%}"></script>
 		<script src="{%static 'assets/js/ace/ace.onpage-help.js'%}"></script>
@@ -987,7 +865,6 @@
 		<script src="{%static 'docs/assets/js/language/html.js'%}"></script>
 		<script src="{%static 'docs/assets/js/language/css.js'%}"></script>
 		<script src="{%static 'docs/assets/js/language/javascript.js'%}"></script>
-
         <script src="{%static 'assets/js/jquery.easypiechart.js'%}"></script>
 
         {% block page_javascript %}

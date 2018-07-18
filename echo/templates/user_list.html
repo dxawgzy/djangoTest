@@ -1,15 +1,14 @@
-{%  extends "index.html" %}
+{% extends "index.html" %}
 
 {% block page_css %}
 {% endblock %}
 
 {% block page_title %}
-    <a href="{% url 'user_list' %}">用户</a>
+    <a href="{% url 'user_list' %}">用户信息</a>
 {% endblock %}
 
 {% block container %}
     {% load staticfiles %}
-
     <div class="row">
         <!-- Search Page BEGINS-->
         <div class="col-xs-12">
@@ -94,6 +93,13 @@
 {#                                            <li>#}
 {#                                              <a href="{% url 'task_edit' item.id %}">编辑用户</a>#}
 {#                                            </li>#}
+                                            <li>
+                                                {% if item.is_active != True %}
+                                                    <a id="modal_button_{{ item.id }}" data-toggle="modal" href="#modal_form" rel="{% url 'user_active' item.id %}" content="确认激活用户 {{ item.username }} 吗？">激活用户</a>
+                                                {% else %}
+                                                    <a id="modal_button_{{ item.id }}" data-toggle="modal" href="#modal_form" rel="{% url 'user_forbidden' item.id %}" content="确认冻结用户 {{ item.username }} 吗？">冻结用户</a>
+                                                {% endif %}
+                                            </li>
                                             <li>
                                                 <a id="modal_button_{{ item.id }}" class="red" data-toggle="modal" href="#modal_form" rel="{% url 'user_delete' item.id %}" content="确认删除用户 {{ item.username }} 吗？">删除用户</a>
                                             </li>

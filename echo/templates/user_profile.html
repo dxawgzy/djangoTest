@@ -229,7 +229,7 @@
                                     <div class="profile-info-name"> Joined </div>
 
                                     <div class="profile-info-value">
-                                        <span class="editable" id="signup">{{ user.date_joined|date:"Y-m-d H:i:s" }}</span>
+                                        <span class="editable" id="signup">{{ user_ins.date_joined|date:"Y-m-d H:i:s" }}</span>
                                     </div>
                                 </div>
 
@@ -237,7 +237,7 @@
                                     <div class="profile-info-name"> Email </div>
 
                                     <div class="profile-info-value">
-                                        <span class="editable" id="login">{{ user.email }}</span>
+                                        <span class="editable" id="login">{{ user_ins.email }}</span>
                                     </div>
                                 </div>
 
@@ -627,7 +627,7 @@
                                                     <div class="profile-info-name"> Joined </div>
 
                                                     <div class="profile-info-value">
-                                                        <span>{{ user.date_joined|date:"Y-m-d H:i:s" }}</span>
+                                                        <span>{{ user_ins.date_joined|date:"Y-m-d H:i:s" }}</span>
                                                     </div>
                                                 </div>
 
@@ -635,7 +635,7 @@
                                                     <div class="profile-info-name"> Email </div>
 
                                                     <div class="profile-info-value">
-                                                        <span>{{ user.email }}</span>
+                                                        <span>{{ user_ins.email }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1807,7 +1807,7 @@
 
                                                 <div class="col-sm-9">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email" id="form-field-email" value="{{ user.email }}" />
+                                                        <input type="email" id="form-field-email" value="{{ user_ins.email }}" />
                                                         <i class="ace-icon fa fa-envelope"></i>
                                                     </span>
                                                 </div>

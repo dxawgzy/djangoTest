@@ -23,6 +23,9 @@ from database import search, search2, customer, book
 from echo import views as echo_views
 from echo.views import RegisterView, ActiveUserView
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^ajax/$', calc_views.ajax, name='ajax'),
@@ -80,4 +83,4 @@ urlpatterns = [
     url(r'^user_forbidden/(?P<pk>\d+)/$', echo_views.user_forbidden, name='user_forbidden'),
     url(r'^user_active/(?P<pk>\d+)/$', echo_views.user_active, name='user_active'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

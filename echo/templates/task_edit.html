@@ -80,6 +80,11 @@
                         {% for data in task.upload_set.all %}
                             <!--get_media_prefix 在settings.py中定义,获取相关路径，并显示相应文件名-->
                             <a href="{% get_media_prefix %}{{ data.upload_title }}">{{ data.upload_title }}</a><br/>
+
+                            <span class="profile-picture">
+                                <img id="avatar" class="editable img-responsive" src="{% get_media_prefix %}{{ data.upload_title }}" />
+                            </span>
+
                         {% endfor %}
                     </div>
                     <!---附件上传页面 end---->

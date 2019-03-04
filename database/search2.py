@@ -2,7 +2,7 @@
 __author__ = 'igis_gzy'
 
 from django.shortcuts import render
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 
 #接收POST请求数据
 def search_post(request):

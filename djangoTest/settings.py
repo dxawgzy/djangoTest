@@ -25,7 +25,7 @@ SECRET_KEY = 'yt(evy9-klcv727)59lj+n1aqk3j#2#bk=x^=*$_f6w#)jj&=1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.127.1.35']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.127.1.40']
 
 
 # Application definition
@@ -173,3 +173,5 @@ EMAIL_HOST_PASSWORD = "123"
 EMAIL_USE_TLS = False
 EMAIL_FROM = "123@123.com"
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+MEDIA_URL = '/media/'

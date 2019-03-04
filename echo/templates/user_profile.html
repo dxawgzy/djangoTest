@@ -54,7 +54,7 @@
                                         <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
                                             <i class="ace-icon fa fa-circle light-green"></i>
                                             &nbsp;
-                                            <span class="white">{{ user.username }}</span>
+                                            <span class="white">{{ user_ins.username }}</span>
                                         </a>
 
                                         <ul class="align-left dropdown-menu dropdown-caret dropdown-lighter">
@@ -203,7 +203,7 @@
                                     <div class="profile-info-name"> Username </div>
 
                                     <div class="profile-info-value">
-                                        <span class="editable" id="username">{{ user.username }}</span>
+                                        <span class="editable" id="username">{{ user_ins.username }}</span>
                                     </div>
                                 </div>
 
@@ -588,7 +588,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <h4 class="blue">
-                                                <span class="middle">{{ user.username }}</span>
+                                                <span class="middle">{{ user_ins.username }}</span>
 
                                                 <span class="label label-purple arrowed-in-right">
                                                     <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
@@ -601,7 +601,7 @@
                                                     <div class="profile-info-name"> Username </div>
 
                                                     <div class="profile-info-value">
-                                                        <span>{{ user.username }}</span>
+                                                        <span>{{ user_ins.username }}</span>
                                                     </div>
                                                 </div>
 
@@ -1737,7 +1737,7 @@
                                                         <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Username</label>
 
                                                         <div class="col-sm-8">
-                                                            <input class="col-xs-12 col-sm-10" type="text" id="form-field-username" placeholder="Username" value="{{ user.username }}" />
+                                                            <input class="col-xs-12 col-sm-10" type="text" id="form-field-username" placeholder="Username" value="{{ user_ins.username }}" />
                                                         </div>
                                                     </div>
 
@@ -1747,8 +1747,8 @@
                                                         <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Name</label>
 
                                                         <div class="col-sm-8">
-                                                            <input class="input-small" type="text" id="form-field-first" placeholder="First Name" value="{{ user.first_name }}" />
-                                                            <input class="input-small" type="text" id="form-field-last" placeholder="Last Name" value="{{ user.last_name }}" />
+                                                            <input class="input-small" type="text" id="form-field-first" placeholder="First Name" value="{{ user_ins.first_name }}" />
+                                                            <input class="input-small" type="text" id="form-field-last" placeholder="Last Name" value="{{ user_ins.last_name }}" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1963,28 +1963,6 @@
             </div><!-- /.col -->
         </div><!-- /.row -->
 
-
-		<!-- basic scripts -->
-
-		<!--[if !IE]> -->
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='{%static 'assets/js/jquery.js'%}'>"+"<"+"/script>");
-		</script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-        <script type="text/javascript">
-            window.jQuery || document.write("<script src='{%static 'assets/js/jquery1x.js'%}'>"+"<"+"/script>");
-        </script>
-        <![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='{%static 'assets/js/jquery.mobile.custom.js'%}'>"+"<"+"/script>");
-		</script>
-		<script src="{%static 'assets/js/bootstrap.js'%}"></script>
-
-		<!-- page specific plugin scripts -->
-
 		<!--[if lte IE 8]>
 		  <script src="{%static 'assets/js/excanvas.js'%}"></script>
 		<![endif]-->
@@ -2001,29 +1979,6 @@
 		<script src="{%static 'assets/js/x-editable/bootstrap-editable.js'%}"></script>
 		<script src="{%static 'assets/js/x-editable/ace-editable.js'%}"></script>
 		<script src="{%static 'assets/js/jquery.maskedinput.js'%}"></script>
-
-		<!-- ace scripts -->
-		<script src="{%static 'assets/js/ace/elements.scroller.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.colorpicker.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.fileinput.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.typeahead.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.wysiwyg.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.spinner.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.treeview.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.wizard.js'%}"></script>
-		<script src="{%static 'assets/js/ace/elements.aside.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.ajax-content.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.touch-drag.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.sidebar.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.sidebar-scroll-1.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.submenu-hover.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.widget-box.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.settings.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.settings-rtl.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.settings-skin.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.widget-on-reload.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.searchbox-autocomplete.js'%}"></script>
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
@@ -2043,8 +1998,6 @@
 					type: 'text',
 					name: 'username'
 			    });
-			
-			
 				
 				//select2 editable
 				var countries = [];
@@ -2123,18 +2076,15 @@
 						'width': 140
 					}
 			    });
-			
-			
 				
 				//custom date editable
 				$('#signup').editable({
 					type: 'adate',
 					date: {
 						//datepicker plugin options
-						    format: 'yyyy/mm/dd',
+                        format: 'yyyy/mm/dd',
 						viewformat: 'yyyy/mm/dd',
-						 weekStart: 1
-						 
+                        weekStart: 1
 						//,nativeUI: true//if true and browser support input[type=date], native browser control will be used
 						//,format: 'yyyy-mm-dd',
 						//viewformat: 'yyyy-mm-dd'
@@ -2152,15 +2102,13 @@
 						//,nativeUI: true//if true and browser support input[type=number], native browser control will be used
 					}
 				});
-				
 			
 			    $('#login').editable({
 			        type: 'slider',
 					name : 'login',
-					
 					slider : {
-						 min : 1,
-						  max: 50,
+                        min : 1,
+                        max: 50,
 						width: 100
 						//,nativeUI: true//if true and browser support input[type=range], native browser control will be used
 					},
@@ -2175,19 +2123,15 @@
 					mode: 'inline',
 			        type: 'wysiwyg',
 					name : 'about',
-			
 					wysiwyg : {
 						//css : {'max-width':'300px'}
 					},
 					success: function(response, newValue) {
 					}
 				});
-				
-				
-				
+
 				// *** editable avatar *** //
 				try {//ie8 throws some harmless exceptions, so let's catch'em
-			
 					//first let's add a fake appendChild method for Image element for browsers that have a problem with this
 					//because editable plugin calls appendChild, and it causes errors on IE at unpredicted points
 					try {
@@ -2195,7 +2139,6 @@
 					} catch(e) {
 						Image.prototype.appendChild = function(el){}
 					}
-			
 					var last_gritter
 					$('#avatar').editable({
 						type: 'image',
@@ -2235,16 +2178,13 @@
 							// ***UPDATE AVATAR HERE*** //
 							//for a working upload example you can replace the contents of this function with 
 							//examples/profile-avatar-update.js
-			
 							var deferred = new $.Deferred
-			
 							var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
 							if(!value || value.length == 0) {
 								deferred.resolve();
 								return deferred.promise();
 							}
-			
-			
+
 							//dummy upload
 							setTimeout(function(){
 								if("FileReader" in window) {
@@ -2252,23 +2192,19 @@
 									var thumb = $('#avatar').next().find('img').data('thumb');
 									if(thumb) $('#avatar').get(0).src = thumb;
 								}
-								
 								deferred.resolve({'status':'OK'});
-			
 								if(last_gritter) $.gritter.remove(last_gritter);
 								last_gritter = $.gritter.add({
 									title: 'Avatar Updated!',
 									text: 'Uploading to server can be easily implemented. A working example is included with the template.',
 									class_name: 'gritter-info gritter-center'
 								});
-								
 							 } , parseInt(Math.random() * 800 + 800))
 			
 							return deferred.promise();
 							
 							// ***END OF UPDATE AVATAR HERE*** //
 						},
-						
 						success: function(response, newValue) {
 						}
 					})
@@ -2370,8 +2306,6 @@
 							
 				});
 			
-				
-			
 				//////////////////////////////
 				$('#profile-feed-1').ace_scroll({
 					height: '250px',
@@ -2397,7 +2331,6 @@
 				});
 			  
 				///////////////////////////////////////////
-			
 				//right & left position
 				//show the user info on right or left depending on its position
 				$('#user-profile-2 .memberdiv').on('mouseenter touchstart', function(){
@@ -2417,8 +2350,7 @@
 				}).on('click', function(e) {
 					e.preventDefault();
 				});
-			
-			
+
 				///////////////////////////////////////////
 				$('#user-profile-3')
 				.find('input[type=file]').ace_file_input({
@@ -2441,8 +2373,7 @@
 				$('.input-mask-phone').mask('(999) 999-9999');
 			
 				$('#user-profile-3').find('input[type=file]').ace_file_input('show_file_list', [{type: 'image', name: $('#avatar').attr('src')}]);
-			
-			
+
 				////////////////////
 				//change profile
 				$('[data-toggle="buttons"] .btn').on('click', function(e){
@@ -2451,9 +2382,7 @@
 					$('.user-profile').parent().addClass('hide');
 					$('#user-profile-'+which).parent().removeClass('hide');
 				});
-				
-				
-				
+
 				/////////////////////////////////////
 				$(document).one('ajaxloadstart.page', function(e) {
 					//in ajax mode, remove remaining elements before leaving page
@@ -2464,18 +2393,5 @@
 				});
 			});
 		</script>
-
-		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-		<link rel="stylesheet" href="{%static 'assets/css/ace.onpage-help.css'%}" />
-		<link rel="stylesheet" href="{%static 'docs/assets/js/themes/sunburst.css'%}" />
-
-		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
-		<script src="{%static 'assets/js/ace/elements.onpage-help.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.onpage-help.js'%}"></script>
-		<script src="{%static 'docs/assets/js/rainbow.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/generic.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/html.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/css.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/javascript.js'%}"></script>
 
 {% endblock %}

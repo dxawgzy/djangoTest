@@ -632,8 +632,6 @@
 							</li>
 
 							<li>
-{#								<a href="#">Other Pages</a>#}
-{#                                <a href="#">{{ page_title }}</a>#}
                                 {% block page_title %}
                                 {% endblock %}
 							</li>
@@ -763,6 +761,15 @@
 						<!-- /section:settings.box -->
 						<div class="row">
 							<div class="col-xs-12">
+
+                                <button id='success' type="submit" class="btn btn-purple btn-sm">查询</button>
+                                <script type="text/javascript">toastr.options.positionClass = 'toast-bottom-right';</script>
+                                <script type="text/javascript">
+                                    $("#success").click(function(){
+                                        toastr.success("成功样式");
+                                    })
+                                </script>
+
 								<!-- PAGE CONTENT BEGINS -->
                                 <!--设置页面内容-->
                                 {% block container %}
@@ -853,19 +860,6 @@
 		<script src="{%static 'assets/js/ace/ace.searchbox-autocomplete.js'%}"></script>
 
 		<!-- inline scripts related to this page -->
-
-		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-		<link rel="stylesheet" href="{%static 'assets/css/ace.onpage-help.css'%}" />
-		<link rel="stylesheet" href="{%static 'docs/assets/js/themes/sunburst.css'%}" />
-		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
-		<script src="{%static 'assets/js/ace/elements.onpage-help.js'%}"></script>
-		<script src="{%static 'assets/js/ace/ace.onpage-help.js'%}"></script>
-		<script src="{%static 'docs/assets/js/rainbow.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/generic.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/html.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/css.js'%}"></script>
-		<script src="{%static 'docs/assets/js/language/javascript.js'%}"></script>
-        <script src="{%static 'assets/js/jquery.easypiechart.js'%}"></script>
 
         {% block page_javascript %}
         {% endblock %}

@@ -25,29 +25,6 @@ def login02(request):  #用户登陆
     template_response = views.login(request, extra_context={'next': '/index'})
     return template_response
 
-def login04(request):
-    form = LoginForm()
-    if request.method == 'GET':
-        if request.GET.get('newsn') == '1':  #刷新验证码
-            csn=CaptchaStore.generate_key()
-            cimageurl= captcha_image_url(csn)
-            return HttpResponse(cimageurl)
-    else:
-        if form.is_valid():
-            human = True
-            username = form.cleaned_data['username']  #获取表单用户密码
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                if user.is_active:
-                    auth_login(request, user)
-                    return HttpResponseRedirect('/index')
-                else:
-                    pass
-            else:
-                pass
-    # return render_to_response('login.html', locals())
-
 def login(request):
     form = CaptchaForm()
     if request.method == 'GET':
@@ -98,7 +75,7 @@ def password_change12(request):  #密码更改
     template_response = views.password_change(request, post_change_redirect='/index')
     return template_response
 
-def password_change(request):
+def password_change(request):  #修改密码
     if request.method == 'POST':
         username = request.user  #获取当前登录的用户名
         user = User.objects.get(username=username)
@@ -234,7 +211,7 @@ def edit(request, table, pk):  #修改数据,函数中的pk代表数据的id
         table_ins = get_object_or_404(Device, pk=pk)
         form = DeviceForm(request.POST or None, instance=table_ins)
         sub_title = '修改设备信息'
-    if form.is_valid():  #判断form是否有效
+    if form.is_valid():
         instance = form.save(commit=False)  #创建实例，需要做些数据处理，暂不做保存
         #将登录用户作为登记人,在修改时，一定要使用str强制,因为数据库中以charfield方式存放了登记人
         if table == 'node':
@@ -299,7 +276,7 @@ def delete(request, table, pk):  #删除操作
 #     return objects, page_range, count, num_pages  #返回分页相关参数
 
 @login_required
-def task_list(request):  #任务的列表显示
+def task_list(request):  #任务列表
     if request.method == 'GET':  #如果通过GET来获取了相应参数，那么进行查询
         kwargs = {}  # 建立过滤条件的键值对
         # kwargs['task_status'] = '处理中'  #默认显示处理中的任务
@@ -349,7 +326,7 @@ def task_list(request):  #任务的列表显示
     return render(request, 'task_list.html', context)  #跳转到相应页面，并将值传递过去
 
 @login_required
-def task_add(request):  #任务列表的增加
+def task_add(request):  #新建任务
     form = TaskForm(request.POST or None)  #从TaskForm获取相关信息
     if form.is_valid():
         task_ins = Task()  #建立一个task实例
@@ -379,7 +356,7 @@ def task_add(request):  #任务列表的增加
     return render(request, 'task_add.html', context)
 
 @login_required
-def task_edit(request, pk):  #任务的编辑
+def task_edit(request, pk):  #编辑任务
     task_ins = get_object_or_404(Task, pk=pk)  #获取相关任务实例
     if request.method == 'POST':
         task_ins.task_contacts = request.POST['task_contacts']  #任务联系人为可编辑选项，并填充原先的任务联系人
@@ -403,7 +380,7 @@ def task_edit(request, pk):  #任务的编辑
     return render(request, 'task_edit.html', context)
 
 @login_required
-def task_delete(request, pk):  #任务列表的任务删除
+def task_delete(request, pk):  #删除任务
     task_ins = get_object_or_404(Task, pk=pk)  #获取选定的task实例
     if request.method == 'POST':
         try:
@@ -446,7 +423,7 @@ def process_delete(request, pk):  #实施步骤删除（编辑任务页面右侧
         return JsonResponse(data, safe=False)
 
 @login_required
-def upload_file(request, pk):  #上传附件函数
+def upload_file(request, pk):  #上传附件
     task_ins = get_object_or_404(Task, pk=pk)  #获得一个任务的实例
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)  #获取form表单，request.FILES是存放文件的地方
@@ -468,8 +445,8 @@ def upload_file(request, pk):  #上传附件函数
     return render(request, 'upload.html', context)
 
 @login_required
-def task_finish(request, pk):  #结束任务功能
-    task_ins = get_object_or_404(Task, pk=pk)  #获取任务实例
+def task_finish(request, pk):  #结束任务
+    task_ins = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
         try:
             task_ins.task_status = '已结单'  #将task的状态置为已结单
@@ -557,7 +534,6 @@ def map(request):  #百度地图
     }
     return render(request, 'baidu_map.html', context)
 
-
 def ocr(request):  #百度OCR文字识别
     access_token = "24.32402e8a9da4394ab059726faeec2f60.2592000.1521953175.282335-10825062"
     url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
@@ -595,7 +571,6 @@ def ocr(request):  #百度OCR文字识别
         'form': form,
     }
     return render(request, 'baidu_ocr.html', context)
-
 
 from random import Random  #用于生成指定长度随机字符串
 def random_str(randomlength=10):
@@ -673,7 +648,7 @@ def faq(request):  #图灵机器人
     return render(request, 'faq.html', context)
 
 @login_required
-def user_list(request):
+def user_list(request):  #用户列表
     if request.method == 'GET':  #如果通过GET来获取了相应参数，那么进行查询
         kwargs = {}  # 建立过滤条件的键值对
         query = ''  # 用于分页显示的query
@@ -693,18 +668,18 @@ def user_list(request):
     return render(request, 'user_list.html', context)
 
 @login_required
-def user_profile(request, pk):
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+def user_profile(request, pk):  #用户详情
+    user_ins = get_object_or_404(User, pk=pk)
     context = {
-        'user': user_ins,
+        'user_ins': user_ins,
         'sub_title': '用户详情',
         'head_title': '用户详情'
     }
-    return render(request, 'user_profile.html', context)  #跳转到相应页面，并将值传递过去
+    return render(request, 'user_profile.html', context)
 
 @login_required
-def user_delete(request, pk):  #任务列表的任务删除
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+def user_delete(request, pk):  #删除用户
+    user_ins = get_object_or_404(User, pk=pk)
     try:
         record = EmailVerifyRecord.objects.get(username=user_ins.username)
         record.delete()  #同步删除注册时的激活链接数据
@@ -713,7 +688,7 @@ def user_delete(request, pk):  #任务列表的任务删除
     if request.method == 'POST':
         try:
             user_ins.delete()
-            data = 'success'  #删除成功,则data信息为success
+            data = 'success'
         except IntegrityError:
             data = 'error'  #如因外键问题，或其他问题，删除失败，则报error
         #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
@@ -721,12 +696,12 @@ def user_delete(request, pk):  #任务列表的任务删除
 
 @login_required
 def user_forbidden(request, pk):  #用户下拉菜单——冻结用户
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+    user_ins = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         try:
-            user_ins.is_active = False  #冻结用户
+            user_ins.is_active = False
             user_ins.save()
-            data = 'success'  #成功,则data信息为success
+            data = 'success'
         except IntegrityError:
             data = 'error'  #如因外键问题，或其他问题失败，则报error
         #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误
@@ -734,12 +709,12 @@ def user_forbidden(request, pk):  #用户下拉菜单——冻结用户
 
 @login_required
 def user_active(request, pk):  #用户下拉菜单——激活用户
-    user_ins = get_object_or_404(User, pk=pk)  #获取选定的user实例
+    user_ins = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         try:
-            user_ins.is_active = True  #激活用户
+            user_ins.is_active = True
             user_ins.save()
-            data = 'success'  #成功,则data信息为success
+            data = 'success'
         except IntegrityError:
             data = 'error'  #如因外键问题，或其他问题失败，则报error
         #将最后的data值传递至JS页面，进行后续处理，safe是将对象序列化，否则会报TypeError错误

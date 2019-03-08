@@ -73,6 +73,7 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),  #验证码模块
     url('^ajax_val/', echo_views.ajax_val, name='ajax_val'),  #动态验证验证码
     url('^forget_passwd/', echo_views.forget_passwd, name='forget_passwd'),  #找回密码
+    url(r'^forget/(?P<forget_code>.*)/$', echo_views.verify_set_passwd, name="verify_set_passwd"),
     url('^map/', echo_views.map, name='map'),  #百度地图
     url('^ocr/', echo_views.ocr, name='ocr'),  #百度OCR文字识别
     url('^tencent/', echo_views.tencent, name='tencent'),  #腾讯AI

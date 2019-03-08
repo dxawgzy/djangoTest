@@ -16,7 +16,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.cache import cache_page
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
-from email_send import send_register_email
+from email_send import send_email
 
 # Create your views here.
 
@@ -488,7 +488,7 @@ class RegisterView(View):   #用户注册
             user_profile.is_active = False  #新建用户为非活跃用户，可通过验证变为活跃用户
             user_profile.password = make_password(password1)  #将密码明文转换为密文
             user_profile.save()  # 保存到数据库
-            send_register_email(email, user_name, "register")  #此处加入了邮箱验证的手段
+            send_email(email, user_name, "register")  #此处加入了邮箱验证的手段
             # form = CaptchaForm()
             # return render(request, 'login.html', {'username': user_name, 'form': form})
             return render(request, 'registered_success.html')
@@ -523,7 +523,38 @@ def ajax_val(request):  #动态验证验证码（焦点离开验证码输入框�
         return JsonResponse(json_data)
 
 def forget_passwd(request):
+    if request.method == 'POST':
+        user_name = request.POST.get("username", "")
+        email = request.POST.get("email", "")
+        is_user_exist = User.objects.filter(username=user_name)  #判断用户是否存在
+        if not is_user_exist:
+            # return render(request, 'forget_passwd.html', {'register_form': register_form, 'msg': u'用户名不存在'})
+            return render(request, 'forget_passwd.html', {'err_message': u'用户名不存在'})
+        user = User.objects.get(username=user_name)
+        if email != user.email:
+            return render(request, 'forget_passwd.html', {'err_message': u'用户邮箱不正确'})
+        send_email(email, user_name, "forget")
+        return render(request, 'forget_success.html')
     return render(request, 'forget_passwd.html')
+
+def verify_set_passwd(request, forget_code):
+    result = EmailVerifyRecord.objects.get(code=forget_code)  #用code在数据库中过滤出信息
+    if request.method == 'POST':
+        if result:
+            username = result.username
+            passwd1 = request.POST.get("password", "")
+            passwd2 = request.POST.get("repeat_password", "")
+            user = User.objects.get(username=username)
+            if passwd1 == passwd2:
+                user.password = make_password(passwd1)
+                user.save()
+                return render(request, 'login.html')
+            else:
+                pass
+    context = {
+        'code': forget_code
+    }
+    return render(request, 'set_new_passwd.html', context)
 
 def map(request):  #百度地图
     if request.method == 'GET':

@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Forget Password</title>
+		<title>Reset Password</title>
 
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -64,22 +64,22 @@
 
 											<div class="space-6"></div>
 											<p>
-												Enter your email and to receive instructions
+												Set a new password for your account
 											</p>
 
-                                            <form  class="mb10" action="{% url 'forget_passwd' %}" method="post"> {% csrf_token %}
+                                            <form  class="mb10" action="{% url 'verify_set_passwd' forget_code=code %}" method="post"> {% csrf_token %}
 												<fieldset>
                                                     <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" name="username" placeholder="Username" />
-															<i class="ace-icon fa fa-user"></i>
+															<input type="password" class="form-control" name="password" placeholder="Password" />
+															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" name="email" placeholder="Email" />
-															<i class="ace-icon fa fa-envelope"></i>
+															<input type="password" class="form-control" name="repeat_password" placeholder="Repeat password" />
+															<i class="ace-icon fa fa-retweet"></i>
 														</span>
 													</label>
 
@@ -88,16 +88,16 @@
 													<div class="clearfix">
 														<button type="submit" class="width-35 pull-right btn btn-sm btn-danger">
 															<i class="ace-icon fa fa-lightbulb-o"></i>
-															<span class="bigger-110">Send Me!</span>
+															<span class="bigger-110">确认</span>
 														</button>
 													</div>
 												</fieldset>
 											</form>
 										</div><!-- /.widget-main -->
 
-										<div class="toolbar center">
-                                            <a href="{% url 'login' %}" style="color:#FFFF00">Back to login</a>
-										</div>
+{#										<div class="toolbar center">#}
+{#                                            <a href="{% url 'login' %}" style="color:#FFFF00">Back to login</a>#}
+{#										</div>#}
 									</div><!-- /.widget-body -->
 								</div><!-- /.forgot-box -->
 							</div><!-- /.position-relative -->

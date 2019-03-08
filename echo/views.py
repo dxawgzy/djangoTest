@@ -548,7 +548,8 @@ def verify_set_passwd(request, forget_code):
             if passwd1 == passwd2:
                 user.password = make_password(passwd1)
                 user.save()
-                return render(request, 'login.html')
+                form = CaptchaForm()
+                return render(request, 'login.html', {'form': form})
             else:
                 pass
     context = {

@@ -44,7 +44,7 @@ aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 # result = aipOcr.basicGeneral(get_file_content('E:\\20180223085328.png'))
 
 # 设置识别身份证正面参数
-isFront = True
+id_card_side = 'front'
 # 调用身份证识别接口
-result = aipOcr.idcard(get_file_content('E:\\20180416105731.jpg'), 'front')
+result = aipOcr.idcard(get_file_content('E:\\20180416105731.jpg'), id_card_side)
 print result

@@ -568,15 +568,9 @@ def map(request):  #百度地图
 
 def ocr(request):  #百度OCR文字识别
     access_token = "24.1d98c11fd6efc2b048a3cad8e2c6f0ed.2592000.1554689929.282335-10825062"
-    url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
-    # url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
-    # params = {
-    #     'image': '',
-    #     # 'language_type': 'CHN_ENG',
-    #     # 'detect_direction': 'false',
-    #     # 'detect_language': 'false',
-    #     # 'probability': 'false',
-    # }
+    # type = "general_basic"   # 通用文字识别
+    type = "idcard"   # 身份证识别
+    url = "https://aip.baidubce.com/rest/2.0/ocr/v1/%s?access_token=%s" % (type, access_token)
     if request.method == 'POST':
         # form = UploadFileForm(request.POST, request.FILES)  #获取form表单，request.FILES是存放文件的地方
         # if form.is_valid():
@@ -584,7 +578,8 @@ def ocr(request):  #百度OCR文字识别
             # uf = pic_base64(request.FILES['file'])  #通过处理上传文件函数来获得返回值
             # img = base64.b64encode(f.read())
         img = request.POST.get("base64_output", "")
-        params = {"image": img}
+        # params = {"image": img}   # 通用文字识别
+        params = {"image": img, "id_card_side": "front"}   # 身份证识别
         params = urllib.urlencode(params)
         request1 = urllib2.Request(url, params)
         request1.add_header('Content-Type', 'application/x-www-form-urlencoded')

@@ -28,7 +28,7 @@
                     if(optp.checked){
                         tmpData = "background-image: url(\"" + tmpData + "\");";
                     }
-                    $_('base64_output').value = tmpData;
+                    $_('base64_output').value = tmpData.split(",")[1];
                      $_('upload_file').disabled = false;
                 test_base64();
                 $_('img_size').innerHTML = "    图片大小：" + Math.round(r.result.length/1024*1000)/1000 + " KB";

@@ -567,7 +567,7 @@ def map(request):  #百度地图
     return render(request, 'baidu_map.html', context)
 
 def ocr(request):  #百度OCR文字识别
-    access_token = "24.32402e8a9da4394ab059726faeec2f60.2592000.1521953175.282335-10825062"
+    access_token = "24.1d98c11fd6efc2b048a3cad8e2c6f0ed.2592000.1554689929.282335-10825062"
     url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + access_token
     # url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
     # params = {
@@ -590,8 +590,7 @@ def ocr(request):  #百度OCR文字识别
         request1.add_header('Content-Type', 'application/x-www-form-urlencoded')
         response = urllib2.urlopen(request1)
         content = response.read()
-        print (content)
-        result = content['words_result']
+        # result = content["words_result"]
         # r = requests.post(url, data=params)
         # respond = json.loads(r.text)
         # result = respond['words_result']

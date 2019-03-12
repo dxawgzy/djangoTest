@@ -42,7 +42,7 @@ def tencent_chat():  #腾讯AI-智能闲聊
     print u"机器人回复：" + result
 
 def tencent_card():  #腾讯AI-身份证识别
-    src = r'E:\\776986996205527761.jpg'
+    src = r'E:\\20180416105731.jpg'
     f = open(src, 'rb')
     img = base64.b64encode(f.read())  # 图像base64编码
     url = "https://api.ai.qq.com/fcgi-bin/ocr/ocr_idcardocr"
@@ -53,7 +53,7 @@ def tencent_card():  #腾讯AI-身份证识别
         'nonce_str': random_str(),  # 随机字符串
         # 'sign': '',  #此条目不不参加get_sign中的计算
         'image': img,
-        'card_type': 1   # 身份证图片类型，0-正面，1-反面
+        'card_type': 0   # 身份证图片类型，0-正面，1-反面
     }
     pa = sorted(params.items()) #按字典key首字母升序排列
     pa.append(('app_key',app_key))
@@ -68,13 +68,16 @@ def tencent_card():  #腾讯AI-身份证识别
     request = urllib2.Request(url, params)
     response = urllib2.urlopen(request)
     respond = response.read()
-    # text = json.loads(respond)
-    print respond
-    # if respond['ret'] ==0:
-    #     result = respond['data']
-    # else:
-    #     result = respond['msg']
-    # print result
+    respond = json.loads(respond)
+    # print respond
+    if respond['ret'] ==0:
+        keyList = ['frontimage', 'backimage']   # 返回结果不打印这两个值
+        for k in keyList:
+            del respond['data'][k]
+        result = respond['data']
+    else:
+        result = respond['msg']
+    print result
 
 if __name__ == '__main__':
     # tencent_chat()

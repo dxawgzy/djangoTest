@@ -25,26 +25,26 @@ def ocr():  #百度OCR文字识别
         # print(result)
         print(content)
 
-# if __name__ == '__main__':
-#     ocr()
+if __name__ == '__main__':
+    ocr()
 
 # 引入文字识别OCR SDK
-from aip import AipOcr
-# 定义常量
-APP_ID = '10825062'
-API_KEY = 'lToSW42BhCMnYiqCLA0eDguK'
-SECRET_KEY = 'MAjfTk2tawRWRheMCw3McnUAGsu8KnKE'
-# 读取图片
-def get_file_content(filePath):
-    with open(filePath, 'rb') as fp:
-        return fp.read()
-# 初始化ApiOcr对象
-aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
-# 调用通用文字识别接口
-# result = aipOcr.basicGeneral(get_file_content('E:\\20180223085328.png'))
-
-# 设置识别身份证正面参数
-id_card_side = 'front'
-# 调用身份证识别接口
-result = aipOcr.idcard(get_file_content('E:\\20180416105731.jpg'), id_card_side)
-print result
+# from aip import AipOcr
+# # 定义常量
+# APP_ID = '10825062'
+# API_KEY = 'lToSW42BhCMnYiqCLA0eDguK'
+# SECRET_KEY = 'MAjfTk2tawRWRheMCw3McnUAGsu8KnKE'
+# # 读取图片
+# def get_file_content(filePath):
+#     with open(filePath, 'rb') as fp:
+#         return fp.read()
+# # 初始化ApiOcr对象
+# aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
+# # 调用通用文字识别接口
+# # result = aipOcr.basicGeneral(get_file_content('E:\\20180223085328.png'))
+#
+# # 设置识别身份证正面参数
+# id_card_side = 'front'
+# # 调用身份证识别接口
+# result = aipOcr.idcard(get_file_content('E:\\20180416105731.jpg'), id_card_side)
+# print result
